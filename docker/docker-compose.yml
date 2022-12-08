@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  postgres:
+    restart: always
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres:/data/postgres
+    ports:
+      - ${DB_PORT}:5432
+
+  auto_post:
+    restart: always
+    image: auto_post:latest
+    entrypoint:
+      - "/bin/sh"
+      - "-c"
+      - "./auto_post"
+    depends_on:
+      - postgres
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+
+  portainer:
+    restart: always
+    image: portainer/portainer
+    ports:
+      - "9000:9000"
+    command: -H unix:///var/run/docker.sock --no-auth
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    profiles:
+      - local
+
+volumes:
+  portainer_data:
+  postgres:

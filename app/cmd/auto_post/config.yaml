@@ -1,0 +1,44 @@
+# Настройки приложения
+app:
+  port: 6667
+
+# Настройки базы данных
+database:
+  host: localhost
+  port: 5432
+  name: postgres
+  user: postgres
+  password: 12345
+
+# Настройки kafka
+kafka:
+  bootstrap_servers:
+    - kafka.dfa-yc.dltru.org:9091
+
+  # SSL
+  ssl:
+    enabled: true
+    ca_location: "/usr/local/share/ca-certificates/CA/CA.crt"
+
+  # SASL
+  sasl:
+    enabled: true
+    mechanisms: PLAIN
+    username: admin
+    password: kafkakafka
+
+  # Настройки consumer
+  consumer:
+    security_protocol: SASL_SSL
+    group_id: nominal-accounts-group
+    session_timeout_ms: 6000
+    auto_offset_reset: earliest
+
+  # Настройки продюсера
+  producer:
+    security_protocol: SASL_SSL
+    session_timeout_ms: 6000
+
+# Настройки schema registry
+schema_registry:
+  url: http://kafka.dfa-yc.dltru.org:8081

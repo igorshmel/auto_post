@@ -1,0 +1,8 @@
+### Создание файла
+POST {{host}}/api/v1/file/
+Content-Type: application/json
+
+{
+  "file_url": "http://www.file.url",
+  "service": "service"
+}
