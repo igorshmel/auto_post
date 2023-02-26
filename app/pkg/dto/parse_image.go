@@ -9,7 +9,8 @@ import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 // ParseImageReqDTO --
 type ParseImageReqDTO struct {
-	FileURL string `json:"file_url"`
+	URL     string `json:"url"`
+	AuthURL string `json:"auth_url"`
 	Service string `json:"service"`
 }
 
@@ -26,7 +27,8 @@ func (ths *ParseImageReqDTO) Parse(c *gin.Context) error {
 // Validate validates an input request
 func (ths *ParseImageReqDTO) Validate() error {
 	return validation.ValidateStruct(ths,
-		validation.Field(&ths.FileURL, validation.Required.Error("is required"), is.URL),
+		validation.Field(&ths.URL, validation.Required.Error("is required"), is.URL),
+		validation.Field(&ths.AuthURL, validation.Required.Error("is required")),
 		validation.Field(&ths.Service, validation.Required.Error("is required")),
 	)
 }

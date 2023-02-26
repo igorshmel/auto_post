@@ -24,7 +24,8 @@ func ParseImageModelToDBO(req *models.ParseImage) *dbo.ParseImageDBO {
 // ParseImageDTOtoDDO --
 func ParseImageDTOtoDDO(req *dto.ParseImageReqDTO) *ddo.ParseImageReqDDO {
 	return &ddo.ParseImageReqDDO{
-		FileURL: req.FileURL,
+		URL:     req.URL,
+		AuthURL: req.AuthURL,
 		Service: req.Service,
 	}
 }
@@ -32,8 +33,8 @@ func ParseImageDTOtoDDO(req *dto.ParseImageReqDTO) *ddo.ParseImageReqDDO {
 // ParseImageDDOtoDBO --
 func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
 	return &dbo.ParseImageDBO{
-		UUID:      ddo.FileUUID,
-		URL:       ddo.FileURL,
+		UUID:      ddo.UUID,
+		URL:       ddo.URL,
 		AuthURL:   ddo.AuthURL,
 		Service:   ddo.Service,
 		Status:    ddo.Status,

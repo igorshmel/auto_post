@@ -1,8 +1,9 @@
 ### Создание файла
-POST {{host}}/api/v1/file/
+POST {{host}}/api/v1/init/
 Content-Type: application/json
 
 {
-  "file_url": "http://www.file.url",
-  "service": "service"
+  "url": "http://www.file.url",
+  "auth_url": "artstation/shmel",
+  "service": "artstation"
 }

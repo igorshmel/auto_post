@@ -9,7 +9,7 @@ import (
 // ParseImage - модель
 type ParseImage struct {
 	URL     string                      `gorm:"column:url;not null"`                    // URL - ссылка на файл для скачивания
-	AuthURL string                      `gorm:"column:auth_url:not null"`               // AuthURL - ссылка на автора
+	AuthURL string                      `gorm:"column:auth_url;not null"`               // AuthURL - ссылка на автора
 	Service string                      `gorm:"not null"`                               // Название сервиса, откуда будет скачен файл
 	Status  status.ParseImageStatusEnum `gorm:"type:parse_image_status;column:status;"` // Статус состояния файла
 	Hash    string                      `gorm:"column:hash"`                            // Хэш файла, для исключения дубликатов изображения
