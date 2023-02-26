@@ -11,7 +11,7 @@ import (
 // ParseImageModelToDBO --
 func ParseImageModelToDBO(req *models.ParseImage) *dbo.ParseImageDBO {
 	return &dbo.ParseImageDBO{
-		FileURL: req.FileURL,
+		URL:     req.URL,
 		Service: req.Service,
 		Status:  req.Status,
 		Hash:    req.Hash,
@@ -32,8 +32,8 @@ func ParseImageDTOtoDDO(req *dto.ParseImageReqDTO) *ddo.ParseImageReqDDO {
 // ParseImageDDOtoDBO --
 func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
 	return &dbo.ParseImageDBO{
-		FileUUID:  ddo.FileUUID,
-		FileURL:   ddo.FileURL,
+		UUID:      ddo.FileUUID,
+		URL:       ddo.FileURL,
 		AuthURL:   ddo.AuthURL,
 		Service:   ddo.Service,
 		Status:    ddo.Status,
@@ -46,11 +46,11 @@ func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
 // ParseImageDBOtoModel --
 func ParseImageDBOtoModel(dbo *dbo.ParseImageDBO) *models.ParseImage {
 	base := basis.BaseModel{}
-	base.UUID = dbo.FileUUID
+	base.UUID = dbo.UUID
 	base.CreatedAt = dbo.CreatedAt
 	base.UpdatedAt = dbo.UpdatedAt
 	return &models.ParseImage{
-		FileURL:   dbo.FileURL,
+		URL:       dbo.URL,
 		AuthURL:   dbo.AuthURL,
 		Service:   dbo.Service,
 		Status:    dbo.Status,

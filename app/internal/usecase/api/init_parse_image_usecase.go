@@ -46,12 +46,12 @@ func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImag
 
 	if err := ths.persister.UnitOfWork(func(tx port.Persister) error { // единица работы, транзакция БД
 
-		if err := ths.persister.SaveNewFile(fileDBO); err != nil {
+		if err := ths.persister.InitParseImage(fileDBO); err != nil {
 			return extErr(nominals.UnknownError,
 				msg("failed to save file entity (UUID: %s) with error: %s", resFileDDO.FileUUID, err.Error()), log)
 		}
 
-		if err := ths.persister.UpdateFileStatus(fileDBO); err != nil {
+		if err := ths.persister.UpdateParseImageStatus(fileDBO); err != nil {
 			return extErr(nominals.UnknownError,
 				msg("failed to update file entity (UUID: %s) with error: %s", resFileDDO.FileUUID, err.Error()), log)
 		}
@@ -61,7 +61,7 @@ func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImag
 		return err
 	}
 
-	log.Debug("create an file (uuid: %s)", fileDBO.FileUUID)
+	log.Debug("create an file (uuid: %s)", fileDBO.UUID)
 
 	return nil
 }
