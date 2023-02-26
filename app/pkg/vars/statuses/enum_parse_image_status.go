@@ -1,7 +1,6 @@
 package status
 
 import (
-	"auto_post/app/pkg/vars/constants"
 	"database/sql/driver"
 	"fmt"
 )
@@ -42,5 +41,5 @@ func (e *ParseImageStatusEnum) MigrationSQL() string {
 			IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname = '%[1]s') THEN 
 				CREATE TYPE %[1]s AS ENUM ('active', 'using');
 			END IF;
-		END$$;`, constants.ParseImageTableName)
+		END$$;`, parseImageStatusEnum)
 }

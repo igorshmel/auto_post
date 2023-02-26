@@ -1,5 +1,13 @@
 package errs
 
+const (
+	MsgEmptyDbPointer = "database pointer is empty"
+	MsgEmptyInputData = "input data is empty"
+	MsgNotFound       = "not found"
+
+	UnknownError = "ERR_UNKNOWN_ERROR"
+)
+
 // CommonErrorResponse is response
 type CommonErrorResponse struct {
 	Domain  string `json:"domain"`  // Наименование сервиса (обязательное поле)

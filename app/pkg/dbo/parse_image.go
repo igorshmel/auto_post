@@ -7,8 +7,8 @@ import (
 
 // ParseImageDBO _
 type ParseImageDBO struct {
-	FileUUID  string
-	FileURL   string
+	UUID      string
+	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string

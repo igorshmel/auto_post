@@ -11,7 +11,7 @@ type Extractor interface {
 
 // Persister - объект для сохранения данных в БД
 type Persister interface {
-	UpdateFileStatus(*dbo.ParseImageDBO) error
-	SaveNewFile(*dbo.ParseImageDBO) error
+	UpdateParseImageStatus(*dbo.ParseImageDBO) error
+	InitParseImage(*dbo.ParseImageDBO) error
 	UnitOfWork(func(Persister) error) (err error)
 }
