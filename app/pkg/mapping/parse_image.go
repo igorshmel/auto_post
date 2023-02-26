@@ -8,9 +8,9 @@ import (
 	"git.fintechru.org/dfa/dfa_lib/models/basis"
 )
 
-// FileModelToDBO --
-func FileModelToDBO(req *models.FileModel) *dbo.FileDBO {
-	return &dbo.FileDBO{
+// ParseImageModelToDBO --
+func ParseImageModelToDBO(req *models.ParseImage) *dbo.ParseImageDBO {
+	return &dbo.ParseImageDBO{
 		FileURL: req.FileURL,
 		Service: req.Service,
 		Status:  req.Status,
@@ -21,19 +21,20 @@ func FileModelToDBO(req *models.FileModel) *dbo.FileDBO {
 	}
 }
 
-// FileDTOtoDDO --
-func FileDTOtoDDO(req *dto.ReqDownloadImage) *ddo.ReqFileDDO {
-	return &ddo.ReqFileDDO{
+// ParseImageDTOtoDDO --
+func ParseImageDTOtoDDO(req *dto.ParseImageReqDTO) *ddo.ParseImageReqDDO {
+	return &ddo.ParseImageReqDDO{
 		FileURL: req.FileURL,
 		Service: req.Service,
 	}
 }
 
-// FileDDOtoDBO --
-func FileDDOtoDBO(ddo *ddo.ResFileDDO) *dbo.FileDBO {
-	return &dbo.FileDBO{
+// ParseImageDDOtoDBO --
+func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
+	return &dbo.ParseImageDBO{
 		FileUUID:  ddo.FileUUID,
 		FileURL:   ddo.FileURL,
+		AuthURL:   ddo.AuthURL,
 		Service:   ddo.Service,
 		Status:    ddo.Status,
 		Hash:      ddo.Hash,
@@ -42,15 +43,15 @@ func FileDDOtoDBO(ddo *ddo.ResFileDDO) *dbo.FileDBO {
 	}
 }
 
-// FileDBOtoModel --
-func FileDBOtoModel(dbo *dbo.FileDBO) *models.FileModel {
+// ParseImageDBOtoModel --
+func ParseImageDBOtoModel(dbo *dbo.ParseImageDBO) *models.ParseImage {
 	base := basis.BaseModel{}
 	base.UUID = dbo.FileUUID
 	base.CreatedAt = dbo.CreatedAt
 	base.UpdatedAt = dbo.UpdatedAt
-
-	return &models.FileModel{
+	return &models.ParseImage{
 		FileURL:   dbo.FileURL,
+		AuthURL:   dbo.AuthURL,
 		Service:   dbo.Service,
 		Status:    dbo.Status,
 		Hash:      dbo.Hash,

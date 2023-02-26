@@ -6,12 +6,12 @@ import "auto_post/app/pkg/dbo"
 
 // Extractor - объект для извлечения данных из БД
 type Extractor interface {
-	GetByUUID(fileDBO *dbo.FileDBO) error
+	GetByUUID(*dbo.ParseImageDBO) error
 }
 
 // Persister - объект для сохранения данных в БД
 type Persister interface {
-	UpdateFileStatus(fileDBO *dbo.FileDBO) error
-	SaveNewFile(fileDBO *dbo.FileDBO) error
+	UpdateFileStatus(*dbo.ParseImageDBO) error
+	SaveNewFile(*dbo.ParseImageDBO) error
 	UnitOfWork(func(Persister) error) (err error)
 }

@@ -1,16 +1,18 @@
 package dbo
 
 import (
+	status "auto_post/app/pkg/vars/statuses"
 	"time"
 )
 
-// FileDBO _
-type FileDBO struct {
+// ParseImageDBO _
+type ParseImageDBO struct {
 	FileUUID  string
 	FileURL   string
+	AuthURL   string
 	Service   string
 	Hash      string
-	Status    string
+	Status    status.ParseImageStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

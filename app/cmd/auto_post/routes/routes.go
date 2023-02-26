@@ -15,13 +15,13 @@ func registerRoutes(dom *domain.Dom, log logger.Logger, g *gin.Engine, repo *rep
 	v1 := apiGroup.Group("/v1")
 
 	// Создание usecase
-	createFileUseCase := api.NewDownloadImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), dom.GetFiler())
+	initParseImageUseCase := api.NewInitParseImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), dom.GetParseImager())
 
 	// Создание обработчиков запросов
-	createFileEndpoint := rest.NewDownloadImageEndpoint(createFileUseCase, log)
+	initParseImageEndpoint := rest.NewInitParseImageEndpoint(initParseImageUseCase, log)
 
 	// Регистрация обработчиков запросов
-	v1.POST("/file/", createFileEndpoint.Execute)
+	v1.POST("/init/", initParseImageEndpoint.Execute)
 }
 
 // Module ..

@@ -7,8 +7,8 @@ import (
 
 // Domain --
 type Domain struct {
-	log  logger.Logger
-	file File
+	log        logger.Logger
+	parseImage ParseImageFile
 }
 
 // NewDefaultDomain - инициализация домена
@@ -22,12 +22,12 @@ type DomConfiguration func(dr *Dom) error
 
 // Dom --
 type Dom struct {
-	Filer port.Filer
+	ParseImager port.ParseImager
 }
 
-// GetFiler --
-func (ths *Dom) GetFiler() port.Filer {
-	return ths.Filer
+// GetParseImager --
+func (ths *Dom) GetParseImager() port.ParseImager {
+	return ths.ParseImager
 }
 
 // NewDom --
@@ -50,7 +50,7 @@ func NewDom(configs ...DomConfiguration) (*Dom, error) {
 func WithDefaultDomain(log logger.Logger) DomConfiguration {
 	return func(ths *Dom) error {
 		dr := NewDefaultDomain(log)
-		ths.Filer = dr
+		ths.ParseImager = dr
 		return nil
 	}
 }

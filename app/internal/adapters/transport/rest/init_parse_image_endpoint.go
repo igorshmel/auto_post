@@ -11,26 +11,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// DownloadImageEndpoint --
-type DownloadImageEndpoint struct {
+// InitParseImageEndpoint --
+type InitParseImageEndpoint struct {
 	log     logger.Logger
-	usecase port.DownloadImageUseCase
+	usecase port.InitParseImageUseCase
 }
 
-// NewDownloadImageEndpoint _
-func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.Endpoint {
-	return DownloadImageEndpoint{
+// NewInitParseImageEndpoint _
+func NewInitParseImageEndpoint(usecase port.InitParseImageUseCase, log logger.Logger) port.Endpoint {
+	return InitParseImageEndpoint{
 		log:     log,
 		usecase: usecase,
 	}
 }
 
 // Execute is handler
-func (ths DownloadImageEndpoint) Execute(ctx *gin.Context) {
+func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("endpoint CreateInvestor")
 
-	req := dto.NewReqDownloadImage()
+	req := dto.NewParseImageReq()
 
 	// request parse
 	if err := req.Parse(ctx); err != nil {

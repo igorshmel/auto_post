@@ -12,33 +12,37 @@ import (
 	"git.fintechru.org/dfa/dfa_lib/logger"
 )
 
-// DownloadImageUseCase _
-type DownloadImageUseCase struct {
+// InitParseImageUseCase _
+type InitParseImageUseCase struct {
 	log       logger.Logger
 	persister port.Persister
 	extractor port.Extractor
-	filer     port.Filer
+	imager    port.ParseImager
 }
 
-// NewDownloadImageUseCase _
-func NewDownloadImageUseCase(log logger.Logger, persister port.Persister, extractor port.Extractor, filer port.Filer) port.DownloadImageUseCase {
-	return DownloadImageUseCase{log: log, persister: persister, extractor: extractor, filer: filer}
+// NewInitParseImageUseCase _
+func NewInitParseImageUseCase(log logger.Logger, persister port.Persister, extractor port.Extractor, filer port.ParseImager) port.InitParseImageUseCase {
+	return InitParseImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer}
 }
 
 // Execute _
-func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.ReqDownloadImage) error {
+func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImageReqDTO) error {
 	msg := fmt.Sprintf
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("usecase saveFile")
 
+	log.Info("file_url:%s", req.FileURL)
+	log.Info("service:%s", req.Service)
+
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	reqFileDDO := mapping.FileDTOtoDDO(req)
-	resFileDDO := ths.filer.CreateFile(reqFileDDO)
+	reqFileDDO := mapping.ParseImageDTOtoDDO(req)
+	resFileDDO := ths.imager.InitParseImage(reqFileDDO)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	fileDBO := mapping.FileDDOtoDBO(resFileDDO)
+	fileDBO := mapping.ParseImageDDOtoDBO(resFileDDO)
+	log.Info("DBO: %v", fileDBO)
 
 	if err := ths.persister.UnitOfWork(func(tx port.Persister) error { // единица работы, транзакция БД
 
@@ -57,7 +61,7 @@ func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.ReqDownloa
 		return err
 	}
 
-	log.Debug("create an file (uuid: %s)", reqFileDDO.FileUUID)
+	log.Debug("create an file (uuid: %s)", fileDBO.FileUUID)
 
 	return nil
 }

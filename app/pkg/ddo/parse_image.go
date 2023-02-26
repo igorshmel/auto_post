@@ -1,25 +1,28 @@
 package ddo
 
 import (
+	status "auto_post/app/pkg/vars/statuses"
 	"time"
 )
 
-// ReqFileDDO --
-type ReqFileDDO struct {
+// ParseImageReqDDO --
+type ParseImageReqDDO struct {
 	FileUUID string
 	FileURL  string
+	AuthURL  string
 	Service  string
 	Hash     string
 	Status   string
 }
 
-// ResFileDDO --
-type ResFileDDO struct {
+// ParseImageResDDO --
+type ParseImageResDDO struct {
 	FileUUID  string
 	FileURL   string
+	AuthURL   string
 	Service   string
 	Hash      string
-	Status    string
+	Status    status.ParseImageStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

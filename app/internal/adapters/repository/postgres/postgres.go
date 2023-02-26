@@ -3,13 +3,14 @@ package postgres
 import (
 	"auto_post/app/internal/adapters/repository/models"
 	"auto_post/app/pkg/config"
+	status "auto_post/app/pkg/vars/statuses"
 	log "git.fintechru.org/dfa/dfa_lib/logger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// MigratebaleEnum - интерфейс для перечислений (enum)
-type MigratebaleEnum interface {
+// MigrateEnum - интерфейс для перечислений (enum)
+type MigrateEnum interface {
 	MigrationSQL() string
 }
 
@@ -50,9 +51,8 @@ func NewPostgresRepository(cfg config.Config, log log.Logger, migrate bool) (*SQ
 
 func migrateData(db *gorm.DB) error {
 	// Создаём перечисления в БД перед миграциями основных моделей
-	enums := []MigratebaleEnum{
-		new(models.EnumTransactionType),
-		new(models.EnumPaymentOrderStatus),
+	enums := []MigrateEnum{
+		new(status.ParseImageStatusEnum),
 	}
 
 	for _, enum := range enums {
@@ -62,12 +62,6 @@ func migrateData(db *gorm.DB) error {
 	}
 
 	return db.AutoMigrate(
-		&models.AccountDetail{},
-		&models.ClientAccount{},
-		&models.NominalAccount{},
-		&models.Transaction{},
-		&models.PaymentOrderRegistry{},
-		&models.PaymentOrder{},
-		&models.FileModel{},
+		&models.ParseImage{},
 	)
 }
