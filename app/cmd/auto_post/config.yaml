@@ -1,12 +1,12 @@
 # Настройки приложения
 app:
-  port: 6667
+  port: 10222
 
 # Настройки базы данных
 database:
   host: localhost
   port: 5432
-  name: postgres
+  name: auto_post
   user: postgres
   password: 12345
 

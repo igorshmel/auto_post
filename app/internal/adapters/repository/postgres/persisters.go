@@ -10,15 +10,15 @@ import (
 )
 
 // SaveNewFile --
-func (ths *SQLStore) SaveNewFile(fileDBO *dbo.FileDBO) error {
+func (ths *SQLStore) SaveNewFile(dbo *dbo.ParseImageDBO) error {
 	if ths == nil || ths.db == nil {
 		return errors.New(nominals.MsgEmptyDbPointer)
 	}
-	if fileDBO == nil {
+	if dbo == nil {
 		return errors.New(nominals.MsgEmptyInputData)
 	}
 
-	fileModel := mapping.FileDBOtoModel(fileDBO)
+	fileModel := mapping.ParseImageDBOtoModel(dbo)
 	if err := ths.db.Table(fileModel.TableName()).
 		Create(&fileModel).Error; err != nil {
 		return err
@@ -27,16 +27,16 @@ func (ths *SQLStore) SaveNewFile(fileDBO *dbo.FileDBO) error {
 }
 
 // UpdateFileStatus --
-func (ths *SQLStore) UpdateFileStatus(fileDBO *dbo.FileDBO) error {
+func (ths *SQLStore) UpdateFileStatus(dbo *dbo.ParseImageDBO) error {
 	if ths == nil || ths.db == nil {
 		return errors.New(nominals.MsgEmptyDbPointer)
 	}
-	if fileDBO == nil {
+	if dbo == nil {
 		return errors.New(nominals.MsgEmptyInputData)
 	}
 
-	return ths.db.Model(models.FileModel{}).
-		Where("uuid", fileDBO.FileUUID).
-		Update("status", fileDBO.Status).
+	return ths.db.Model(models.ParseImage{}).
+		Where("uuid", dbo.FileUUID).
+		Update("status", dbo.Status).
 		Error
 }

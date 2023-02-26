@@ -3,6 +3,7 @@ package bundlefx
 import (
 	"context"
 	"fmt"
+	"github.com/gin-contrib/cors"
 
 	"auto_post/app/cmd/auto_post/configs"
 	"auto_post/app/cmd/auto_post/domain"
@@ -13,7 +14,6 @@ import (
 	"auto_post/app/cmd/auto_post/routes"
 	"auto_post/app/pkg/config"
 	"git.fintechru.org/dfa/dfa_lib/logger"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
 )

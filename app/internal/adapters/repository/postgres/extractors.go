@@ -5,11 +5,11 @@ import (
 )
 
 // GetByUUID  --
-func (ths *SQLStore) GetByUUID(FileDBO *dbo.FileDBO) error {
+func (ths *SQLStore) GetByUUID(dbo *dbo.ParseImageDBO) error {
 	if ths == nil || ths.db == nil {
 		return nil
 	}
-	if FileDBO == nil {
+	if dbo == nil {
 		return nil
 	}
 

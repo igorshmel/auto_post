@@ -4,7 +4,7 @@ import (
 	"auto_post/app/pkg/ddo"
 )
 
-// Filer interface --
-type Filer interface {
-	CreateFile(ddo *ddo.ReqFileDDO) *ddo.ResFileDDO
+// ParseImager interface --
+type ParseImager interface {
+	InitParseImage(ddo *ddo.ParseImageReqDDO) *ddo.ParseImageResDDO
 }
