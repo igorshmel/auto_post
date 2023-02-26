@@ -7,18 +7,18 @@ import (
 
 // ParseImageReqDDO --
 type ParseImageReqDDO struct {
-	FileUUID string
-	FileURL  string
-	AuthURL  string
-	Service  string
-	Hash     string
-	Status   string
+	UUID    string
+	URL     string
+	AuthURL string
+	Service string
+	Hash    string
+	Status  string
 }
 
 // ParseImageResDDO --
 type ParseImageResDDO struct {
-	FileUUID  string
-	FileURL   string
+	UUID      string
+	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string

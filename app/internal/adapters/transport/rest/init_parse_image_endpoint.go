@@ -28,7 +28,7 @@ func NewInitParseImageEndpoint(usecase port.InitParseImageUseCase, log logger.Lo
 // Execute is handler
 func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
-	log := ths.log.WithMethod("endpoint CreateInvestor")
+	log := ths.log.WithMethod("endpoint InitParseImage")
 
 	req := dto.NewParseImageReq()
 
@@ -41,6 +41,8 @@ func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 		return
 	}
 
+	log.Debug("req: %v", *req)
+
 	// validate request
 	if err := req.Validate(); err != nil {
 		log.Error("error of validation: %s", err)
@@ -52,7 +54,7 @@ func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 
 	err := ths.usecase.Execute(ctx, req)
 	if err != nil {
-		log.Error("failed call to usecase CreateInvestor: %s", err)
+		log.Error("failed call to usecase InitParseImage: %s", err)
 		ctx.JSON(http.StatusOK, errs.FromError(err).GinJSON())
 		return
 	}

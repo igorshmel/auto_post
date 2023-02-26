@@ -33,8 +33,8 @@ func (ths *Domain) newParseImage() {
 
 func (ths *Domain) readParseImage() *ddo.ParseImageResDDO {
 	return &ddo.ParseImageResDDO{
-		FileUUID:  ths.parseImage.UUID,
-		FileURL:   ths.parseImage.URL,
+		UUID:      ths.parseImage.UUID,
+		URL:       ths.parseImage.URL,
 		AuthURL:   ths.parseImage.AuthURL,
 		Service:   ths.parseImage.Service,
 		Status:    status.ParseImageStatusEnum(ths.parseImage.Status),
@@ -45,16 +45,17 @@ func (ths *Domain) readParseImage() *ddo.ParseImageResDDO {
 }
 
 // InitParseImage --
-func (ths *Domain) InitParseImage(fileDDO *ddo.ParseImageReqDDO) *ddo.ParseImageResDDO {
+func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO) *ddo.ParseImageResDDO {
 	activeStatus := status.ParseImageActiveStatus
 
 	h := sha256.New()
-	h.Write([]byte(fileDDO.FileURL + fileDDO.AuthURL))
+	h.Write([]byte(ddo.URL + ddo.AuthURL))
 	hashString := base64.StdEncoding.EncodeToString(h.Sum(nil))
+
 	ths.newParseImage()
-	ths.parseImage.URL = fileDDO.FileURL
-	ths.parseImage.AuthURL = fileDDO.AuthURL
-	ths.parseImage.Service = fileDDO.Service
+	ths.parseImage.URL = ddo.URL
+	ths.parseImage.AuthURL = ddo.AuthURL
+	ths.parseImage.Service = ddo.Service
 	ths.parseImage.Status = activeStatus.Str()
 	ths.parseImage.Hash = hashString
 	return ths.readParseImage()

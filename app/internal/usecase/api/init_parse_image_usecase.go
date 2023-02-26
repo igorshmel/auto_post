@@ -1,6 +1,7 @@
 package api
 
 import (
+	"auto_post/app/pkg/errs"
 	"context"
 	"fmt"
 
@@ -8,7 +9,6 @@ import (
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
 	"auto_post/app/pkg/mapping"
-	"git.fintechru.org/dfa/dfa_lib/errs/nominals"
 	"git.fintechru.org/dfa/dfa_lib/logger"
 )
 
@@ -29,31 +29,28 @@ func NewInitParseImageUseCase(log logger.Logger, persister port.Persister, extra
 func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImageReqDTO) error {
 	msg := fmt.Sprintf
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
-	log := ths.log.WithMethod("usecase saveFile")
-
-	log.Info("file_url:%s", req.FileURL)
-	log.Info("service:%s", req.Service)
+	log := ths.log.WithMethod("usecase InitParseImage")
 
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	reqFileDDO := mapping.ParseImageDTOtoDDO(req)
-	resFileDDO := ths.imager.InitParseImage(reqFileDDO)
+	reqParseImageDDO := mapping.ParseImageDTOtoDDO(req)
+	resParseImageDDO := ths.imager.InitParseImage(reqParseImageDDO)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	fileDBO := mapping.ParseImageDDOtoDBO(resFileDDO)
-	log.Info("DBO: %v", fileDBO)
+	parseImageDBO := mapping.ParseImageDDOtoDBO(resParseImageDDO)
+	log.Info("DBO: %v", parseImageDBO)
 
 	if err := ths.persister.UnitOfWork(func(tx port.Persister) error { // единица работы, транзакция БД
 
-		if err := ths.persister.InitParseImage(fileDBO); err != nil {
-			return extErr(nominals.UnknownError,
-				msg("failed to save file entity (UUID: %s) with error: %s", resFileDDO.FileUUID, err.Error()), log)
+		if err := ths.persister.InitParseImage(parseImageDBO); err != nil {
+			return extErr(errs.UnknownError,
+				msg("failed to save file entity (UUID: %s) with error: %s", resParseImageDDO.UUID, err.Error()), log)
 		}
 
-		if err := ths.persister.UpdateParseImageStatus(fileDBO); err != nil {
-			return extErr(nominals.UnknownError,
-				msg("failed to update file entity (UUID: %s) with error: %s", resFileDDO.FileUUID, err.Error()), log)
+		if err := ths.persister.UpdateParseImageStatus(parseImageDBO); err != nil {
+			return extErr(errs.UnknownError,
+				msg("failed to update file entity (UUID: %s) with error: %s", resParseImageDDO.UUID, err.Error()), log)
 		}
 
 		return nil
@@ -61,7 +58,7 @@ func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImag
 		return err
 	}
 
-	log.Debug("create an file (uuid: %s)", fileDBO.UUID)
+	log.Debug("create an file (uuid: %s)", parseImageDBO.UUID)
 
 	return nil
 }

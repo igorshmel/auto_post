@@ -27,9 +27,9 @@ var Module = fx.Options(
 	routes.Module,
 	repo.Module,
 
-	fx.Invoke(manageServer),
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),
+	fx.Invoke(manageServer),
 )
 
 // manageServer управляет запуском и остановкой сервера
