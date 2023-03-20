@@ -1,17 +1,17 @@
 package bundlefx
 
 import (
-	"context"
-	"fmt"
-
 	"auto_post/app/cmd/auto_post/configs"
 	"auto_post/app/cmd/auto_post/domain"
+	"auto_post/app/cmd/auto_post/evts"
 	"auto_post/app/cmd/auto_post/ginserver"
 	"auto_post/app/cmd/auto_post/log"
 	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/cmd/auto_post/repo"
 	"auto_post/app/cmd/auto_post/routes"
 	"auto_post/app/pkg/config"
+	"context"
+	"fmt"
 	"git.fintechru.org/dfa/dfa_lib/logger"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -26,10 +26,11 @@ var Module = fx.Options(
 	domain.Module,
 	routes.Module,
 	repo.Module,
+	evts.Module,
 
-	fx.Invoke(manageServer),
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),
+	fx.Invoke(manageServer),
 )
 
 // manageServer управляет запуском и остановкой сервера

@@ -6,9 +6,14 @@ import (
 	"auto_post/app/pkg/dto"
 )
 
+// InitParseImageUseCase _
+type InitParseImageUseCase interface {
+	Execute(context.Context, *dto.ParseImageReqDTO) error
+}
+
 // DownloadImageUseCase _
 type DownloadImageUseCase interface {
-	Execute(context.Context, *dto.ReqDownloadImage) error
+	Execute(context.Context, *dto.DownloadImageReqDTO) error
 }
 
 // BasisUseCase _

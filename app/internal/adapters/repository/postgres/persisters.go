@@ -1,42 +1,41 @@
 package postgres
 
 import (
-	"errors"
-
 	"auto_post/app/internal/adapters/repository/models"
 	"auto_post/app/pkg/dbo"
+	"auto_post/app/pkg/errs"
 	"auto_post/app/pkg/mapping"
-	"git.fintechru.org/dfa/dfa_lib/errs/nominals"
+	"errors"
 )
 
-// SaveNewFile --
-func (ths *SQLStore) SaveNewFile(fileDBO *dbo.FileDBO) error {
+// InitParseImage --
+func (ths *SQLStore) InitParseImage(dbo *dbo.ParseImageDBO) error {
 	if ths == nil || ths.db == nil {
-		return errors.New(nominals.MsgEmptyDbPointer)
+		return errors.New(errs.MsgEmptyDbPointer)
 	}
-	if fileDBO == nil {
-		return errors.New(nominals.MsgEmptyInputData)
+	if dbo == nil {
+		return errors.New(errs.MsgEmptyInputData)
 	}
 
-	fileModel := mapping.FileDBOtoModel(fileDBO)
-	if err := ths.db.Table(fileModel.TableName()).
-		Create(&fileModel).Error; err != nil {
+	model := mapping.ParseImageDBOtoModel(dbo)
+	if err := ths.db.Table(model.TableName()).
+		Create(&model).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-// UpdateFileStatus --
-func (ths *SQLStore) UpdateFileStatus(fileDBO *dbo.FileDBO) error {
+// UpdateParseImageStatus --
+func (ths *SQLStore) UpdateParseImageStatus(dbo *dbo.ParseImageDBO) error {
 	if ths == nil || ths.db == nil {
-		return errors.New(nominals.MsgEmptyDbPointer)
+		return errors.New(errs.MsgEmptyDbPointer)
 	}
-	if fileDBO == nil {
-		return errors.New(nominals.MsgEmptyInputData)
+	if dbo == nil {
+		return errors.New(errs.MsgEmptyInputData)
 	}
 
-	return ths.db.Model(models.FileModel{}).
-		Where("uuid", fileDBO.FileUUID).
-		Update("status", fileDBO.Status).
+	return ths.db.Model(models.ParseImage{}).
+		Where("uuid", dbo.UUID).
+		Update("status", dbo.Status).
 		Error
 }

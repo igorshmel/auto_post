@@ -36,7 +36,7 @@ func (m *MockExtractor) EXPECT() *MockExtractorMockRecorder {
 }
 
 // GetByUUID mocks base method.
-func (m *MockExtractor) GetByUUID(fileDBO *dbo.FileDBO) error {
+func (m *MockExtractor) GetByUUID(fileDBO *dbo.ParseImageDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByUUID", fileDBO)
 	ret0, _ := ret[0].(error)
@@ -73,9 +73,9 @@ func (m *MockPersister) EXPECT() *MockPersisterMockRecorder {
 }
 
 // SaveNewFile mocks base method.
-func (m *MockPersister) SaveNewFile(fileDBO *dbo.FileDBO) error {
+func (m *MockPersister) InitParseImage(fileDBO *dbo.ParseImageDBO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveNewFile", fileDBO)
+	ret := m.ctrl.Call(m, "InitParseImage", fileDBO)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -83,7 +83,7 @@ func (m *MockPersister) SaveNewFile(fileDBO *dbo.FileDBO) error {
 // SaveNewFile indicates an expected call of SaveNewFile.
 func (mr *MockPersisterMockRecorder) SaveNewFile(fileDBO interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveNewFile", reflect.TypeOf((*MockPersister)(nil).SaveNewFile), fileDBO)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InitParseImage", reflect.TypeOf((*MockPersister)(nil).InitParseImage), fileDBO)
 }
 
 // UnitOfWork mocks base method.
@@ -101,9 +101,9 @@ func (mr *MockPersisterMockRecorder) UnitOfWork(arg0 interface{}) *gomock.Call {
 }
 
 // UpdateFileStatus mocks base method.
-func (m *MockPersister) UpdateFileStatus(fileDBO *dbo.FileDBO) error {
+func (m *MockPersister) UpdateParseImageStatus(fileDBO *dbo.ParseImageDBO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateFileStatus", fileDBO)
+	ret := m.ctrl.Call(m, "UpdateParseImageStatus", fileDBO)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -111,5 +111,5 @@ func (m *MockPersister) UpdateFileStatus(fileDBO *dbo.FileDBO) error {
 // UpdateFileStatus indicates an expected call of UpdateFileStatus.
 func (mr *MockPersisterMockRecorder) UpdateFileStatus(fileDBO interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFileStatus", reflect.TypeOf((*MockPersister)(nil).UpdateFileStatus), fileDBO)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateParseImageStatus", reflect.TypeOf((*MockPersister)(nil).UpdateParseImageStatus), fileDBO)
 }

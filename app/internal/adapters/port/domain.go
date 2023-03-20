@@ -2,9 +2,10 @@ package port
 
 import (
 	"auto_post/app/pkg/ddo"
+	"github.com/nuttech/bell/v2"
 )
 
-// Filer interface --
-type Filer interface {
-	CreateFile(ddo *ddo.ReqFileDDO) *ddo.ResFileDDO
+// ParseImager interface --
+type ParseImager interface {
+	InitParseImage(ddo *ddo.ParseImageReqDDO, events *bell.Events) *ddo.ParseImageResDDO
 }

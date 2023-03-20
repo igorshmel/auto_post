@@ -11,32 +11,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// DownloadImageEndpoint --
-type DownloadImageEndpoint struct {
+// InitParseImageEndpoint --
+type InitParseImageEndpoint struct {
 	log     logger.Logger
-	usecase port.DownloadImageUseCase
+	usecase port.InitParseImageUseCase
 }
 
-// NewDownloadImageEndpoint --
-func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.Endpoint {
-	return DownloadImageEndpoint{
+// NewInitParseImageEndpoint _
+func NewInitParseImageEndpoint(usecase port.InitParseImageUseCase, log logger.Logger) port.Endpoint {
+	return InitParseImageEndpoint{
 		log:     log,
 		usecase: usecase,
 	}
 }
 
 // Execute is handler
-func (ths DownloadImageEndpoint) Execute(ctx *gin.Context) {
+func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("endpoint InitParseImage")
 
-	req := dto.NewDownloadImageReq()
+	req := dto.NewParseImageReq()
 
 	// request parse
 	if err := req.Parse(ctx); err != nil {
-		log.Error("unable to download a request: %s", err)
+		log.Error("unable to parse a request: %s", err)
 		ctx.JSON(http.StatusOK, errs.New().SetCode(errs.ParseRequest).
-			SetMsg("unable to download a request").
+			SetMsg("unable to parse a request").
 			GinJSON())
 		return
 	}
@@ -54,7 +54,7 @@ func (ths DownloadImageEndpoint) Execute(ctx *gin.Context) {
 
 	err := ths.usecase.Execute(ctx, req)
 	if err != nil {
-		log.Error("failed call to usecase DownloadImage: %s", err)
+		log.Error("failed call to usecase InitParseImage: %s", err)
 		ctx.JSON(http.StatusOK, errs.FromError(err).GinJSON())
 		return
 	}
