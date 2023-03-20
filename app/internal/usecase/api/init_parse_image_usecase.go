@@ -4,6 +4,7 @@ import (
 	"auto_post/app/pkg/errs"
 	"context"
 	"fmt"
+	"github.com/nuttech/bell/v2"
 
 	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/internal/adapters/port"
@@ -18,11 +19,17 @@ type InitParseImageUseCase struct {
 	persister port.Persister
 	extractor port.Extractor
 	imager    port.ParseImager
+	events    *bell.Events
 }
 
 // NewInitParseImageUseCase _
-func NewInitParseImageUseCase(log logger.Logger, persister port.Persister, extractor port.Extractor, filer port.ParseImager) port.InitParseImageUseCase {
-	return InitParseImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer}
+func NewInitParseImageUseCase(
+	log logger.Logger,
+	persister port.Persister,
+	extractor port.Extractor,
+	filer port.ParseImager,
+	events *bell.Events) port.InitParseImageUseCase {
+	return InitParseImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer, events: events}
 }
 
 // Execute _
@@ -31,10 +38,11 @@ func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImag
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("usecase InitParseImage")
 
+	// call event event_name
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
 	reqParseImageDDO := mapping.ParseImageDTOtoDDO(req)
-	resParseImageDDO := ths.imager.InitParseImage(reqParseImageDDO)
+	resParseImageDDO := ths.imager.InitParseImage(reqParseImageDDO, ths.events)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------

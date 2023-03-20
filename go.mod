@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
+	github.com/nuttech/bell/v2 v2.2.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.13.0
 	go.uber.org/fx v1.18.2
