@@ -4,6 +4,7 @@ import (
 	status "auto_post/app/pkg/vars/statuses"
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/nuttech/bell/v2"
 	"time"
 
 	"auto_post/app/pkg/ddo"
@@ -45,7 +46,7 @@ func (ths *Domain) readParseImage() *ddo.ParseImageResDDO {
 }
 
 // InitParseImage --
-func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO) *ddo.ParseImageResDDO {
+func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO, bell *bell.Events) *ddo.ParseImageResDDO {
 	activeStatus := status.ParseImageActiveStatus
 
 	h := sha256.New()
@@ -58,6 +59,10 @@ func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO) *ddo.ParseImageResD
 	ths.parseImage.Service = ddo.Service
 	ths.parseImage.Status = activeStatus.Str()
 	ths.parseImage.Hash = hashString
+
+	// call event event_name
+	_ = bell.Ring("auto_post", "Hello bell!")
+
 	return ths.readParseImage()
 }
 
