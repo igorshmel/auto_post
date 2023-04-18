@@ -4,7 +4,7 @@ import (
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/internal/adapters/repository/postgres"
 	"auto_post/app/pkg/config"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "auto_post/app/pkg/log"
 )
 
 // RepoConfiguration is an alias for a function that will take in a pointer to an Repository and modify it

@@ -22,6 +22,16 @@ var (
 	errWrongFileName      = fmt.Errorf("wrong the file name")
 )
 
+// VKConfig - настройки api социальной сети ВК
+type VKConfig struct {
+	PreTimeOut  int    `mapstructure:"pre_time_out" validate:"required"`
+	MaxHashTags int    `mapstructure:"max_hash_tags" validate:"required"`
+	VkHashTags  string `mapstructure:"vk_hash_tags" validate:"required"`
+	VkToken     string `mapstructure:"vk_token" validate:"required"`
+	VkGroupId   string `mapstructure:"vk_group_id" validate:"required"`
+	VkAlbumId   string `mapstructure:"vk_album_id" validate:"required"`
+}
+
 // AppConfig - общие настройки приложения
 type AppConfig struct {
 	Port string `mapstructure:"port" validate:"required"`

@@ -2,7 +2,7 @@ package domain
 
 import (
 	"auto_post/app/internal/domain"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 

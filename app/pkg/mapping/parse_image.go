@@ -2,10 +2,10 @@ package mapping
 
 import (
 	"auto_post/app/internal/adapters/repository/models"
+	"auto_post/app/internal/adapters/repository/models/basis"
 	"auto_post/app/pkg/dbo"
 	"auto_post/app/pkg/ddo"
 	"auto_post/app/pkg/dto"
-	"git.fintechru.org/dfa/dfa_lib/models/basis"
 )
 
 // ParseImageModelToDBO --

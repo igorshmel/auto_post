@@ -1,5 +1,6 @@
 package errs
 
+// Error constants
 const (
 	MsgEmptyDbPointer = "database pointer is empty"
 	MsgEmptyInputData = "input data is empty"

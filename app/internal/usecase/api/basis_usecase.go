@@ -5,7 +5,7 @@ import (
 
 	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/internal/adapters/port"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "auto_post/app/pkg/log"
 )
 
 // BasisUseCase --

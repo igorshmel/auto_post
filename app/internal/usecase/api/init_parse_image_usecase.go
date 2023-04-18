@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"github.com/nuttech/bell/v2"
 
-	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
+	logger "auto_post/app/pkg/log"
 	"auto_post/app/pkg/mapping"
-	"git.fintechru.org/dfa/dfa_lib/logger"
 )
 
 // InitParseImageUseCase _
@@ -35,7 +34,6 @@ func NewInitParseImageUseCase(
 // Execute _
 func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImageReqDTO) error {
 	msg := fmt.Sprintf
-	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("usecase InitParseImage")
 
 	// call event event_name

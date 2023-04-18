@@ -42,3 +42,12 @@ kafka:
 # Настройки schema registry
 schema_registry:
   url: http://kafka.dfa-yc.dltru.org:8081
+
+# Настройки базы данных
+vk:
+  vK_token: vk1.a.OFAAcW9PulAQuiqNTjtB6cJh5otyvkGI5uVOs3OU2pZ2S34eQLfYOydVz1r3iJOWnsgF5U01P76FP6ASPBnYVuk-_F4meXzvkV4m2pVFvuTNrsAfbZoggt8typIrZdS-A5jboV_g6OIaa1g__7c20ut5GHiLpWYoPsB8lyinA4Xs9kUyR3H__H99niSanvtI
+  vK_group_id: 49606473
+  vk_album_id: 263737825
+  vK_hash_Tags: DigitalArt,Drawings,художник,арт,портрет,красота,онлайн,иллюстрация,клево,класс,супер,скетч,творчество,рисунок,sensual,paintings,pictures,online,art,paint,fine,paint,illustration,painting,modern,drawing,face,color,ink,style,pic,artwork,paintings,draw,beautiful,digital,brush,cool,picture,wow,искусство,творчество,декор,творю,творение,творческийпроцесс,творим,творческаямастерская,инстаарт,краскижизни,картина,картины,paper,sketchbook,illustrations,picture,pictureoftheday,artpop,artstagram,artlife,illustration,pictures,artwork,artsy,sketch,artoftheday,instaart,like,подпишись,лайк,я,любовь,инстаграм,россия,москва,инстатаг,инста,лайки,инстаграманет,девушки,жизньпрекрасна,друзья,инстаграмнедели,супер,красота,me,love,instadaily,fun,followme,swag,instalike,tbt,picoftheday,follow4follow,fashion,like4like,follow,instagood,amazing,cute,friends,bestoftheday,happy,instatag,l4l,beautiful,likeforlike
+  max_hash_stags: 6
+  pre_timeOut: 1600

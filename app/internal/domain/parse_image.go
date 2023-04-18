@@ -1,6 +1,8 @@
 package domain
 
 import (
+	"auto_post/app/pkg/events"
+	"auto_post/app/pkg/vars/constants"
 	status "auto_post/app/pkg/vars/statuses"
 	"crypto/sha256"
 	"encoding/base64"
@@ -49,6 +51,8 @@ func (ths *Domain) readParseImage() *ddo.ParseImageResDDO {
 func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO, bell *bell.Events) *ddo.ParseImageResDDO {
 	activeStatus := status.ParseImageActiveStatus
 
+	ths.uploadPhotoToServer()
+
 	h := sha256.New()
 	h.Write([]byte(ddo.URL + ddo.AuthURL))
 	hashString := base64.StdEncoding.EncodeToString(h.Sum(nil))
@@ -61,7 +65,14 @@ func (ths *Domain) InitParseImage(ddo *ddo.ParseImageReqDDO, bell *bell.Events) 
 	ths.parseImage.Hash = hashString
 
 	// call event event_name
-	_ = bell.Ring("auto_post", "Hello bell!")
+	if err := bell.Ring(
+		constants.DownloadImageEventName,
+		events.DownloadImageEvent{
+			Link:   ths.parseImage.URL,
+			Output: "/home/shmel/Public/image.jpg",
+		}); err != nil {
+		ths.log.Error("unable send event DownloadImage with error: %s", err.Error())
+	}
 
 	return ths.readParseImage()
 }

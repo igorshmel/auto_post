@@ -6,8 +6,8 @@ import (
 	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
-	"git.fintechru.org/dfa/dfa_lib/errs"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	"auto_post/app/pkg/errs"
+	logger "auto_post/app/pkg/log"
 	"github.com/gin-gonic/gin"
 )
 
