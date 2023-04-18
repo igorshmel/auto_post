@@ -2,13 +2,14 @@ package domain
 
 import (
 	"auto_post/app/internal/adapters/port"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "auto_post/app/pkg/log"
 )
 
 // Domain --
 type Domain struct {
-	log        logger.Logger
-	parseImage ParseImageFile
+	log            logger.Logger
+	parseImage     ParseImageFile
+	youTubeMachine YouTubeMachine
 }
 
 // NewDefaultDomain - инициализация домена

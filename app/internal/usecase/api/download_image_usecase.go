@@ -1,12 +1,11 @@
 package api
 
 import (
-	"auto_post/app/cmd/auto_post/middleware"
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
 	"auto_post/app/pkg/helpers"
+	logger "auto_post/app/pkg/log"
 	"context"
-	"git.fintechru.org/dfa/dfa_lib/logger"
 )
 
 // DownloadImageUseCase _
@@ -28,7 +27,6 @@ func NewDownloadImageUseCase(
 
 // Execute _
 func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.DownloadImageReqDTO) error {
-	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
 	log := ths.log.WithMethod("usecase DownloadImage")
 
 	err := helpers.DownloadFile(req.Output, req.URL)

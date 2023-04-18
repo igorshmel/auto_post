@@ -3,8 +3,8 @@ package postgres
 import (
 	"auto_post/app/internal/adapters/repository/models"
 	"auto_post/app/pkg/config"
+	logger "auto_post/app/pkg/log"
 	status "auto_post/app/pkg/vars/statuses"
-	log "git.fintechru.org/dfa/dfa_lib/logger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,11 +17,11 @@ type MigrateEnum interface {
 // SQLStore fulfills the Extractor and Persister document interfaces
 type SQLStore struct {
 	db  *gorm.DB
-	log log.Logger
+	log logger.Logger
 }
 
 // NewPostgresRepository returns a memory repository instance
-func NewPostgresRepository(cfg config.Config, log log.Logger, migrate bool) (*SQLStore, error) {
+func NewPostgresRepository(cfg config.Config, log logger.Logger, migrate bool) (*SQLStore, error) {
 	dbGorm, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: cfg.CreateDSN(),
 	}))

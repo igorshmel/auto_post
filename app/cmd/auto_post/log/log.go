@@ -1,7 +1,7 @@
 package log
 
 import (
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 
