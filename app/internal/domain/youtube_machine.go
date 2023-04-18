@@ -48,6 +48,7 @@ func (ths *Domain) uploadPhotoToServer() {
 	if err != nil {
 		err = errors.New(fmt.Sprintf("error uploaded photoWall: %s", err.Error()))
 	}
+  
 	// сохранить картинку для поста на стене группы
 	paramsSaveWallPhoto := map[string]string{
 		"group_id":     ths.youTubeMachine.VkGroupId,
