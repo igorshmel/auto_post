@@ -4,8 +4,8 @@ import (
 	"auto_post/app/internal/domains/vk_machine/structs"
 	"auto_post/app/pkg/config"
 	"auto_post/app/pkg/ddo"
-	"auto_post/app/pkg/helpers"
 	logger "auto_post/app/pkg/log"
+	"auto_post/app/pkg/tools"
 	"auto_post/app/pkg/vars/constants"
 	"fmt"
 )
@@ -39,7 +39,7 @@ func (ths VkMachine) UploadPhotoToServer(ddo *ddo.VKMachineDDO) {
 
 	l.Debug("postToVk | getWallUploadServerReq: %v", paramsWallPhotosGetUploadServer)
 
-	responseWallUploadServer, err := helpers.Request("v", "photos.getWallUploadServer", paramsWallPhotosGetUploadServer, &ths.getWallUploads)
+	responseWallUploadServer, err := tools.Request("v", "photos.getWallUploadServer", paramsWallPhotosGetUploadServer, &ths.getWallUploads)
 
 	l.Debug("postToVk | getWallUploadServer Response: %s", ths.getWallUploads.Response)
 
@@ -50,7 +50,7 @@ func (ths VkMachine) UploadPhotoToServer(ddo *ddo.VKMachineDDO) {
 	}
 
 	// подготовительный этап в формировании загрузки на сайт
-	uploaded, err := helpers.PhotoWall(ths.getWallUploads.Response.UploadURL, path)
+	uploaded, err := tools.PhotoWall(ths.getWallUploads.Response.UploadURL, path)
 
 	l.Debug("postToVk | uploaded %v", uploaded)
 	if err != nil {
@@ -66,7 +66,7 @@ func (ths VkMachine) UploadPhotoToServer(ddo *ddo.VKMachineDDO) {
 		"v":            constants.APIVersion,
 	}
 
-	responseSaveWallPhoto, err := helpers.Request("v", "photos.saveWallPhoto", paramsSaveWallPhoto, &ths.saveWall)
+	responseSaveWallPhoto, err := tools.Request("v", "photos.saveWallPhoto", paramsSaveWallPhoto, &ths.saveWall)
 
 	l.Debug("postToVk | saveWallPhoto %v", ths.saveWall)
 	if err != nil {

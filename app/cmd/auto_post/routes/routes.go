@@ -29,15 +29,15 @@ func registerRoutes(
 	v1 := apiGroup.Group("/v1")
 
 	// Создание usecase
-	initParseImageUseCase := api.NewCreateRecordUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
+	createRecordUseCase := api.NewCreateRecordUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
 	downloadImageUseCase := api.NewDownloadImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
 
 	// Создание обработчиков запросов
-	initParseImageEndpoint := rest.NewCreateRecordEndpoint(initParseImageUseCase, log)
+	createRecordEndpoint := rest.NewCreateRecordEndpoint(createRecordUseCase, log)
 	downloadImageEndpoint := rest.NewDownloadImageEndpoint(downloadImageUseCase, log)
 
 	// Регистрация обработчиков запросов
-	v1.POST("/init/", initParseImageEndpoint.CreateRecordExecute)
+	v1.POST("/init/", createRecordEndpoint.CreateRecordExecute)
 	v1.POST("/download/", downloadImageEndpoint.DownloadExecute)
 
 	// add listener on event
