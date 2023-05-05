@@ -1,19 +1,22 @@
-package models
+package structs
 
+// PostPic --
 type PostPic struct {
-	Id         int
+	ID         int
 	Originlink string
 }
 
+// VkPicIni --
 type VkPicIni struct {
 	PreTimeOut  int
 	MaxHashTags int
 	VkHashTags  string
 	VkToken     string
-	VkGroupId   string
-	VkAlbumId   string
+	VkGroupID   string
+	VkAlbumID   string
 }
 
+// VkVideoGetErr --
 type VkVideoGetErr struct {
 	Error struct {
 		ErrorCode     int    `json:"error_code"`
@@ -25,6 +28,7 @@ type VkVideoGetErr struct {
 	} `json:"error"`
 }
 
+// VkVideoGet --
 type VkVideoGet struct {
 	Response struct {
 		Count int `json:"count"`
@@ -63,18 +67,23 @@ type VkVideoGet struct {
 	} `json:"response"`
 }
 
+// VkGetWallUploadS --
 type VkGetWallUploadS struct {
 	Response VkGetWallUploadServer `json:"response"`
 }
 
+// VkGetWallUploadServer --
 type VkGetWallUploadServer struct {
-	UploadUrl string `json:"upload_url"`
+	UploadURL string `json:"upload_url"`
 }
 
+// VkSaveWallPhoto --
 type VkSaveWallPhoto struct {
 	Response []VkSaveWallPhotoRes `json:"response"`
 }
+
+// VkSaveWallPhotoRes --
 type VkSaveWallPhotoRes struct {
-	Id      int32 `json:"id"`
-	OwnerId int32 `json:"owner_id"`
+	ID      int32 `json:"id"`
+	OwnerID int32 `json:"owner_id"`
 }

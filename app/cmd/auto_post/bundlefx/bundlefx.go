@@ -2,7 +2,7 @@ package bundlefx
 
 import (
 	"auto_post/app/cmd/auto_post/configs"
-	"auto_post/app/cmd/auto_post/domain"
+	"auto_post/app/cmd/auto_post/domains"
 	"auto_post/app/cmd/auto_post/events"
 	"auto_post/app/cmd/auto_post/ginserver"
 	"auto_post/app/cmd/auto_post/log"
@@ -23,10 +23,11 @@ var Module = fx.Options(
 	ginserver.Module,
 	log.Module,
 	configs.Module,
-	domain.Module,
 	routes.Module,
 	repo.Module,
 	events.Module,
+	domains.ManagerDomainModule,
+	domains.VkMachineDomainModule,
 
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),

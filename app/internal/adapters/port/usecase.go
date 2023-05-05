@@ -6,17 +6,22 @@ import (
 	"auto_post/app/pkg/dto"
 )
 
-// InitParseImageUseCase _
-type InitParseImageUseCase interface {
-	Execute(context.Context, *dto.ParseImageReqDTO) error
+// CreateRecordUseCase --
+type CreateRecordUseCase interface {
+	Execute(context.Context, *dto.CreateRecordReqDTO) error
 }
 
-// DownloadImageUseCase _
+// VKWallPostUseCase --
+type VKWallPostUseCase interface {
+	Execute(context.Context) error
+}
+
+// DownloadImageUseCase --
 type DownloadImageUseCase interface {
 	Execute(context.Context, *dto.DownloadImageReqDTO) error
 }
 
-// BasisUseCase _
+// BasisUseCase --
 type BasisUseCase interface {
 	Execute(context.Context) error
 }

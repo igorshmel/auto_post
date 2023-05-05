@@ -13,7 +13,7 @@ type DownloadImageUseCase struct {
 	log       logger.Logger
 	persister port.Persister
 	extractor port.Extractor
-	imager    port.ParseImager
+	imager    port.ManagerDomain
 }
 
 // NewDownloadImageUseCase _
@@ -21,7 +21,7 @@ func NewDownloadImageUseCase(
 	log logger.Logger,
 	persister port.Persister,
 	extractor port.Extractor,
-	filer port.ParseImager) port.DownloadImageUseCase {
+	filer port.ManagerDomain) port.DownloadImageUseCase {
 	return DownloadImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer}
 }
 

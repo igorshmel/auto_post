@@ -12,51 +12,51 @@ import (
 	"auto_post/app/pkg/mapping"
 )
 
-// InitParseImageUseCase _
-type InitParseImageUseCase struct {
-	log       logger.Logger
-	persister port.Persister
-	extractor port.Extractor
-	imager    port.ParseImager
-	events    *bell.Events
+// CreateRecordUseCase _
+type CreateRecordUseCase struct {
+	log           logger.Logger
+	events        *bell.Events
+	persister     port.Persister
+	extractor     port.Extractor
+	managerDomain port.ManagerDomain
 }
 
-// NewInitParseImageUseCase _
-func NewInitParseImageUseCase(
+// NewCreateRecordUseCase _
+func NewCreateRecordUseCase(
 	log logger.Logger,
+	events *bell.Events,
 	persister port.Persister,
 	extractor port.Extractor,
-	filer port.ParseImager,
-	events *bell.Events) port.InitParseImageUseCase {
-	return InitParseImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer, events: events}
+	managerDomain port.ManagerDomain,
+) port.CreateRecordUseCase {
+	return CreateRecordUseCase{log: log, events: events, persister: persister, extractor: extractor, managerDomain: managerDomain}
 }
 
 // Execute _
-func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImageReqDTO) error {
+func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecordReqDTO) error {
 	msg := fmt.Sprintf
-	log := ths.log.WithMethod("usecase InitParseImage")
+	log := ths.log.WithMethod("usecase CreateRecord")
 
-	// call event event_name
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	reqParseImageDDO := mapping.ParseImageDTOtoDDO(req)
-	resParseImageDDO := ths.imager.InitParseImage(reqParseImageDDO, ths.events)
+	reqCreateRecordDDO := mapping.CreateRecordDTOtoDDO(req)
+	resCreateRecordDDO := ths.managerDomain.CreateRecord(reqCreateRecordDDO, ths.events)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	parseImageDBO := mapping.ParseImageDDOtoDBO(resParseImageDDO)
-	log.Info("DBO: %v", parseImageDBO)
+	createRecordDBO := mapping.CreateRecordDDOtoDBO(resCreateRecordDDO)
+	log.Info("DBO: %v", createRecordDBO)
 
 	if err := ths.persister.UnitOfWork(func(tx port.Persister) error { // единица работы, транзакция БД
 
-		if err := ths.persister.InitParseImage(parseImageDBO); err != nil {
+		if err := ths.persister.CreateRecord(createRecordDBO); err != nil {
 			return extErr(errs.UnknownError,
-				msg("failed to save file entity (UUID: %s) with error: %s", resParseImageDDO.UUID, err.Error()), log)
+				msg("failed to create record (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
 		}
 
-		if err := ths.persister.UpdateParseImageStatus(parseImageDBO); err != nil {
+		if err := ths.persister.UpdateRecordStatus(createRecordDBO); err != nil {
 			return extErr(errs.UnknownError,
-				msg("failed to update file entity (UUID: %s) with error: %s", resParseImageDDO.UUID, err.Error()), log)
+				msg("failed to update record status (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
 		}
 
 		return nil
@@ -64,7 +64,7 @@ func (ths InitParseImageUseCase) Execute(ctx context.Context, req *dto.ParseImag
 		return err
 	}
 
-	log.Debug("create an file (uuid: %s)", parseImageDBO.UUID)
+	log.Debug("create record (uuid: %s)", createRecordDBO.UUID)
 
 	return nil
 }

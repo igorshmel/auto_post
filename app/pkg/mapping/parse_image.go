@@ -8,9 +8,9 @@ import (
 	"auto_post/app/pkg/dto"
 )
 
-// ParseImageModelToDBO --
-func ParseImageModelToDBO(req *models.ParseImage) *dbo.ParseImageDBO {
-	return &dbo.ParseImageDBO{
+// ManagerModelToDBO --
+func ManagerModelToDBO(req *models.Manager) *dbo.ManagerDBO {
+	return &dbo.ManagerDBO{
 		URL:     req.URL,
 		Service: req.Service,
 		Status:  req.Status,
@@ -21,18 +21,18 @@ func ParseImageModelToDBO(req *models.ParseImage) *dbo.ParseImageDBO {
 	}
 }
 
-// ParseImageDTOtoDDO --
-func ParseImageDTOtoDDO(req *dto.ParseImageReqDTO) *ddo.ParseImageReqDDO {
-	return &ddo.ParseImageReqDDO{
+// CreateRecordDTOtoDDO --
+func CreateRecordDTOtoDDO(req *dto.CreateRecordReqDTO) *ddo.CreateRecordRequestDDO {
+	return &ddo.CreateRecordRequestDDO{
 		URL:     req.URL,
 		AuthURL: req.AuthURL,
 		Service: req.Service,
 	}
 }
 
-// ParseImageDDOtoDBO --
-func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
-	return &dbo.ParseImageDBO{
+// CreateRecordDDOtoDBO --
+func CreateRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.ManagerDBO {
+	return &dbo.ManagerDBO{
 		UUID:      ddo.UUID,
 		URL:       ddo.URL,
 		AuthURL:   ddo.AuthURL,
@@ -44,13 +44,13 @@ func ParseImageDDOtoDBO(ddo *ddo.ParseImageResDDO) *dbo.ParseImageDBO {
 	}
 }
 
-// ParseImageDBOtoModel --
-func ParseImageDBOtoModel(dbo *dbo.ParseImageDBO) *models.ParseImage {
+// ManagerDBOtoModel --
+func ManagerDBOtoModel(dbo *dbo.ManagerDBO) *models.Manager {
 	base := basis.BaseModel{}
 	base.UUID = dbo.UUID
 	base.CreatedAt = dbo.CreatedAt
 	base.UpdatedAt = dbo.UpdatedAt
-	return &models.ParseImage{
+	return &models.Manager{
 		URL:       dbo.URL,
 		AuthURL:   dbo.AuthURL,
 		Service:   dbo.Service,

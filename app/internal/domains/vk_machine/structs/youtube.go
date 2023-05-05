@@ -1,37 +1,43 @@
-package models
+package structs
 
 import "time"
 
+// IniVK --
 type IniVK struct {
 	VkToken    string
-	VkGroupId  string
+	VkGroupID  string
 	PreTimeOut int
 }
 
+// IniYouTube --
 type IniYouTube struct {
-	YouTubeApiKey string
-	PlayListId    string
+	YouTubeAPIKey string
+	PlayListID    string
 }
 
-type UploadUrlVK struct {
+// UploadURLVK --
+type UploadURLVK struct {
 	Error struct {
 		ErrorCode int    `json:"error_code"`
 		ErrorMsg  string `json:"error_msg"`
 	}
 	Response struct {
-		UploadUrl string `json:"upload_url"`
+		UploadURL string `json:"upload_url"`
 	}
 }
+
+// WallPost --
 type WallPost struct {
 	Error struct {
 		ErrorCode int    `json:"error_code"`
 		ErrorMsg  string `json:"error_msg"`
 	}
 	Response struct {
-		PostId string `json:"post_id"`
+		PostID string `json:"post_id"`
 	}
 }
 
+// YouTubeResp --
 type YouTubeResp struct {
 	Kind          string `json:"kind"`
 	Etag          string `json:"etag"`

@@ -11,37 +11,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// InitParseImageEndpoint --
-type InitParseImageEndpoint struct {
+// CreateRecordEndpoint --
+type CreateRecordEndpoint struct {
 	log     logger.Logger
-	usecase port.InitParseImageUseCase
+	usecase port.CreateRecordUseCase
 }
 
-// NewInitParseImageEndpoint _
-func NewInitParseImageEndpoint(usecase port.InitParseImageUseCase, log logger.Logger) port.Endpoint {
-	return InitParseImageEndpoint{
+// NewCreateRecordEndpoint _
+func NewCreateRecordEndpoint(usecase port.CreateRecordUseCase, log logger.Logger) port.CreateRecordEndpoint {
+	return CreateRecordEndpoint{
 		log:     log,
 		usecase: usecase,
 	}
 }
 
-// Execute is handler
-func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
+// CreateRecordExecute is handler
+func (ths CreateRecordEndpoint) CreateRecordExecute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
-	log := ths.log.WithMethod("endpoint InitParseImage")
+	log := ths.log.WithMethod("endpoint create record")
 
-	req := dto.NewParseImageReq()
+	req := dto.CreateRecordReqDTO{}
 
 	// request parse
 	if err := req.Parse(ctx); err != nil {
-		log.Error("unable to parse a request: %s", err)
+		log.Error("unable to parse request: %s", err)
 		ctx.JSON(http.StatusOK, errs.New().SetCode(errs.ParseRequest).
 			SetMsg("unable to parse a request").
 			GinJSON())
 		return
 	}
 
-	log.Debug("req: %v", *req)
+	log.Debug("req: %v", req)
 
 	// validate request
 	if err := req.Validate(); err != nil {
@@ -52,9 +52,9 @@ func (ths InitParseImageEndpoint) Execute(ctx *gin.Context) {
 		return
 	}
 
-	err := ths.usecase.Execute(ctx, req)
+	err := ths.usecase.Execute(ctx, &req)
 	if err != nil {
-		log.Error("failed call to usecase InitParseImage: %s", err)
+		log.Error("failed call to usecase CreateRecord: %s", err)
 		ctx.JSON(http.StatusOK, errs.FromError(err).GinJSON())
 		return
 	}
