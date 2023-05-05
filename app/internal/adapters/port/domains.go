@@ -2,12 +2,11 @@ package port
 
 import (
 	"auto_post/app/pkg/ddo"
-	"github.com/nuttech/bell/v2"
 )
 
 // ManagerDomain interface --
 type ManagerDomain interface {
-	CreateRecord(ddo *ddo.CreateRecordRequestDDO, events *bell.Events) *ddo.CreateRecordResponseDDO
+	CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRecordResponseDDO
 }
 
 // VkMachineDomain interface --

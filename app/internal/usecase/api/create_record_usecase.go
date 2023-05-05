@@ -1,7 +1,10 @@
 package api
 
 import (
+	"auto_post/app/pkg/config"
 	"auto_post/app/pkg/errs"
+	"auto_post/app/pkg/events"
+	"auto_post/app/pkg/vars/constants"
 	"context"
 	"fmt"
 	"github.com/nuttech/bell/v2"
@@ -14,8 +17,9 @@ import (
 
 // CreateRecordUseCase _
 type CreateRecordUseCase struct {
+	cfg           config.Config
 	log           logger.Logger
-	events        *bell.Events
+	bell          *bell.Events
 	persister     port.Persister
 	extractor     port.Extractor
 	managerDomain port.ManagerDomain
@@ -23,13 +27,14 @@ type CreateRecordUseCase struct {
 
 // NewCreateRecordUseCase _
 func NewCreateRecordUseCase(
+	cfg config.Config,
 	log logger.Logger,
 	events *bell.Events,
 	persister port.Persister,
 	extractor port.Extractor,
 	managerDomain port.ManagerDomain,
 ) port.CreateRecordUseCase {
-	return CreateRecordUseCase{log: log, events: events, persister: persister, extractor: extractor, managerDomain: managerDomain}
+	return CreateRecordUseCase{cfg: cfg, log: log, bell: events, persister: persister, extractor: extractor, managerDomain: managerDomain}
 }
 
 // Execute _
@@ -40,7 +45,7 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
 	reqCreateRecordDDO := mapping.CreateRecordDTOtoDDO(req)
-	resCreateRecordDDO := ths.managerDomain.CreateRecord(reqCreateRecordDDO, ths.events)
+	resCreateRecordDDO := ths.managerDomain.CreateRecord(reqCreateRecordDDO)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -65,6 +70,22 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 	}
 
 	log.Debug("create record (uuid: %s)", createRecordDBO.UUID)
+
+	// -- Периферия --
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	// отправка события в домен DownloadDomain
+	if err := ths.bell.Ring(
+		constants.DownloadImageEventName,
+		events.DownloadImageEvent{
+			Link:   resCreateRecordDDO.URL,
+			Output: ths.cfg.DownloadMachine.Path + resCreateRecordDDO.UUID + ".jpg",
+		}); err != nil {
+
+		ths.log.Error("unable send event DownloadImage with error: %s", err.Error())
+	}
+
+	log.Debug("send DownloadEvent success!")
 
 	return nil
 }

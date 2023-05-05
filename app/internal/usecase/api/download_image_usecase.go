@@ -3,8 +3,8 @@ package api
 import (
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
-	"auto_post/app/pkg/helpers"
 	logger "auto_post/app/pkg/log"
+	"auto_post/app/pkg/tools"
 	"context"
 )
 
@@ -29,7 +29,7 @@ func NewDownloadImageUseCase(
 func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.DownloadImageReqDTO) error {
 	log := ths.log.WithMethod("usecase DownloadImage")
 
-	err := helpers.DownloadFile(req.Output, req.URL)
+	err := tools.DownloadFile(req.Output, req.URL)
 	if err != nil {
 		log.Error("failed to download file with error: %s", err.Error())
 	}

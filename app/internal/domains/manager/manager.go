@@ -2,13 +2,10 @@ package parsemachine
 
 import (
 	"auto_post/app/pkg/config"
-	"auto_post/app/pkg/events"
 	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/vars/constants"
 	status "auto_post/app/pkg/vars/statuses"
 	"crypto/sha256"
 	"encoding/base64"
-	"github.com/nuttech/bell/v2"
 	"time"
 
 	"auto_post/app/pkg/ddo"
@@ -59,7 +56,7 @@ func (ths *Manager) readRecord() *ddo.CreateRecordResponseDDO {
 }
 
 // CreateRecord --
-func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO, bell *bell.Events) *ddo.CreateRecordResponseDDO {
+func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRecordResponseDDO {
 	activeStatus := status.RecordActiveStatus
 
 	h := sha256.New()
@@ -72,16 +69,6 @@ func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO, bell *bell.Eve
 	ths.Service = ddo.Service
 	ths.Status = activeStatus.Str()
 	ths.Hash = hashString
-
-	// call event event_name
-	if err := bell.Ring(
-		constants.DownloadImageEventName,
-		events.DownloadImageEvent{
-			Link:   ths.URL,
-			Output: ths.cfg.DownloadMachine.Path + ths.UUID + ".jpg",
-		}); err != nil {
-		ths.log.Error("unable send event DownloadImage with error: %s", err.Error())
-	}
 
 	return ths.readRecord()
 }

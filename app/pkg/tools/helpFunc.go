@@ -1,4 +1,4 @@
-package helpers
+package tools
 
 import (
 	"auto_post/app/internal/domains/vk_machine/structs"
