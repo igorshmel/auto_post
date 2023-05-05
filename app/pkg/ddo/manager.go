@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// ParseImageReqDDO --
-type ParseImageReqDDO struct {
+// CreateRecordRequestDDO --
+type CreateRecordRequestDDO struct {
 	UUID    string
 	URL     string
 	AuthURL string
@@ -15,14 +15,14 @@ type ParseImageReqDDO struct {
 	Status  string
 }
 
-// ParseImageResDDO --
-type ParseImageResDDO struct {
+// CreateRecordResponseDDO --
+type CreateRecordResponseDDO struct {
 	UUID      string
 	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string
-	Status    status.ParseImageStatusEnum
+	Status    status.ManagerStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

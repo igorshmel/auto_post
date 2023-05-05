@@ -1,9 +1,11 @@
-package models
+package structs
 
 import "fmt"
 
 // Response is the base struct for all responses
 // that come back from the Pinterest API.
+
+// Empty --
 type Empty struct{}
 
 //type Response struct {
@@ -21,17 +23,22 @@ type Empty struct{}
 //	Next   string `json:"next"`
 //}
 
+// UploadPhotoWallResponse --
 type UploadPhotoWallResponse struct {
 	Server int    `json:"server"`
 	Photo  string `json:"photo"`
 	Hash   string `json:"hash"`
 }
+
+// UploadPhotoResponse --
 type UploadPhotoResponse struct {
 	Server    int    `json:"server"`
-	AlbumId   int    `json:"aid"`
+	AlbumID   int    `json:"aid"`
 	Hash      string `json:"hash"`
 	PhotoList string `json:"photos_list"`
 }
+
+// Error --
 type Error struct {
 	Code          int    `json:"error_code"`
 	Message       string `json:"error_msg"`
@@ -41,6 +48,7 @@ type Error struct {
 	} `json:"request_params"`
 }
 
+// Error --
 func (e *Error) Error() string {
 	return fmt.Sprintf("code %d: %s", e.Code, e.Message)
 }

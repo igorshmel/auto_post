@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-// ParseImageDBO _
-type ParseImageDBO struct {
+// ManagerDBO --
+type ManagerDBO struct {
 	UUID      string
 	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string
-	Status    status.ParseImageStatusEnum
+	Status    status.ManagerStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

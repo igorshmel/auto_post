@@ -2,7 +2,12 @@ package port
 
 import "github.com/gin-gonic/gin"
 
-// Endpoint _
-type Endpoint interface {
-	Execute(ginContext *gin.Context)
+// CreateRecordEndpoint --
+type CreateRecordEndpoint interface {
+	CreateRecordExecute(ginContext *gin.Context)
+}
+
+// DownloadEndpoint --
+type DownloadEndpoint interface {
+	DownloadExecute(ginContext *gin.Context)
 }

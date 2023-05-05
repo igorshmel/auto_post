@@ -3,9 +3,10 @@ package routes
 import (
 	"auto_post/app/internal/adapters/repository"
 	"auto_post/app/internal/adapters/transport/rest"
-	"auto_post/app/internal/domain"
+	manager "auto_post/app/internal/domains/manager"
+	vkMachine "auto_post/app/internal/domains/manager"
 	"auto_post/app/internal/usecase/api"
-	"auto_post/app/internal/usecase/inside"
+	"auto_post/app/pkg/config"
 	"auto_post/app/pkg/dto"
 	"auto_post/app/pkg/events"
 	logger "auto_post/app/pkg/log"
@@ -15,27 +16,34 @@ import (
 	"go.uber.org/fx"
 )
 
-func registerRoutes(dom *domain.Dom, log logger.Logger, g *gin.Engine, repo *repository.Repository, bellEvent *bell.Events) {
+func registerRoutes(
+	g *gin.Engine,
+	cfg config.Config,
+	log logger.Logger,
+	repo *repository.Repository,
+	bellEvent *bell.Events,
+	managerDomain *manager.Domain,
+	vkMachineDomain *vkMachine.Domain,
+) {
 	apiGroup := g.Group("/api")
 	v1 := apiGroup.Group("/v1")
 
 	// Создание usecase
-	initParseImageUseCase := api.NewInitParseImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), dom.GetParseImager(), bellEvent)
-	downloadImageUseCase := api.NewDownloadImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), dom.GetParseImager())
+	initParseImageUseCase := api.NewCreateRecordUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
+	downloadImageUseCase := api.NewDownloadImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
 
 	// Создание обработчиков запросов
-	initParseImageEndpoint := rest.NewInitParseImageEndpoint(initParseImageUseCase, log)
+	initParseImageEndpoint := rest.NewCreateRecordEndpoint(initParseImageUseCase, log)
 	downloadImageEndpoint := rest.NewDownloadImageEndpoint(downloadImageUseCase, log)
 
 	// Регистрация обработчиков запросов
-	v1.POST("/init/", initParseImageEndpoint.Execute)
-	v1.POST("/download/", downloadImageEndpoint.Execute)
-	downloadImageInside := inside.NewDownloadImageInside(log)
+	v1.POST("/init/", initParseImageEndpoint.CreateRecordExecute)
+	v1.POST("/download/", downloadImageEndpoint.DownloadExecute)
 
 	// add listener on event
 	bellEvent.Listen(constants.DownloadImageEventName, func(msg bell.Message) {
 		downloadImageEvent := msg.(events.DownloadImageEvent)
-		if err := downloadImageInside.Execute(&dto.DownloadImageReqDTO{
+		if err := downloadImageUseCase.Execute(nil, &dto.DownloadImageReqDTO{
 			URL:    downloadImageEvent.Link,
 			Output: downloadImageEvent.Output,
 		}); err != nil {

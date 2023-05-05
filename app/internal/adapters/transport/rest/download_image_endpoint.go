@@ -18,17 +18,17 @@ type DownloadImageEndpoint struct {
 }
 
 // NewDownloadImageEndpoint --
-func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.Endpoint {
+func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.DownloadEndpoint {
 	return DownloadImageEndpoint{
 		log:     log,
 		usecase: usecase,
 	}
 }
 
-// Execute is handler
-func (ths DownloadImageEndpoint) Execute(ctx *gin.Context) {
+// DownloadExecute is handler
+func (ths DownloadImageEndpoint) DownloadExecute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
-	log := ths.log.WithMethod("endpoint InitParseImage")
+	log := ths.log.WithMethod("endpoint CreateRecord")
 
 	req := dto.NewDownloadImageReq()
 

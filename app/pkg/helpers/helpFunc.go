@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	models2 "auto_post/app/internal/domain/models"
+	"auto_post/app/internal/domains/vk_machine/structs"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -20,7 +20,8 @@ import (
 	"unsafe"
 )
 
-func UrlEncoded(str string) string {
+// URLEncoded --
+func URLEncoded(str string) string {
 	if r, err := regexp.Compile(","); err == nil {
 		str = r.ReplaceAllString(str, "%2C")
 		if r, err = regexp.Compile("\n"); err == nil {
@@ -43,33 +44,34 @@ func UrlEncoded(str string) string {
 	return ""
 }
 
+// VideoID --
 func VideoID(link string) string {
 	// Parse the URL and ensure there are no errors.
 	if strings.Contains(link, "attribution_link") {
 		return YTP(YTP(link, "u"), "v")
-	} else {
-		return YTP(link, "v")
 	}
+	return YTP(link, "v")
 }
 
+// YTP --
 func YTP(link string, key string) string {
 	if u, err := url.Parse(link); err == nil {
 		if fragments, err := url.ParseQuery(u.RawQuery); err == nil {
 			if len(fragments[key]) > 0 {
 				log.Print(fragments[key][0])
 				return fragments[key][0]
-			} else {
-				log.Print("not found")
 			}
-		} else {
-			log.Printf("error ParseQuery: %v", err)
+			log.Print("not found")
+			return ""
 		}
+		log.Printf("error ParseQuery: %v", err)
 	} else {
 		log.Printf("error Parse: %v", err)
 	}
 	return ""
 }
 
+// RangeInt --
 func RangeInt(min int, max int, n int) []int {
 	rand.Seed(time.Now().UnixNano())
 	arr := make([]int, n)
@@ -83,7 +85,7 @@ func RangeInt(min int, max int, n int) []int {
 
 // PhotoWall upload file (on filePath) to given url.
 // Return info about uploaded photo.
-func PhotoWall(url, filePath string) (*models2.UploadPhotoWallResponse, error) {
+func PhotoWall(url, filePath string) (*structs.UploadPhotoWallResponse, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
@@ -130,7 +132,7 @@ func PhotoWall(url, filePath string) (*models2.UploadPhotoWallResponse, error) {
 		return nil, err
 	}
 
-	var uploaded models2.UploadPhotoWallResponse
+	var uploaded structs.UploadPhotoWallResponse
 
 	err = json.Unmarshal(body, &uploaded)
 	if err != nil {
@@ -184,6 +186,7 @@ func PhotoGroup(url, filePath string) (models.UploadPhotoResponse, error) {
 	return uploaded, nil
 }
 */
+
 // Request provides access to VK API methods.
 func Request(s string, method string, params map[string]string, st interface{}) ([]byte, error) {
 
@@ -230,7 +233,7 @@ func Request(s string, method string, params map[string]string, st interface{}) 
 	}
 
 	var handler struct {
-		Error    *models2.Error
+		Error    *structs.Error
 		Response json.RawMessage
 	}
 	err = json.Unmarshal(body, &handler)
@@ -243,6 +246,7 @@ func Request(s string, method string, params map[string]string, st interface{}) 
 	return handler.Response, nil
 }
 
+// ResToStruct --
 func ResToStruct(b *http.Response, s interface{}) error {
 	jss, err := ioutil.ReadAll(b.Body)
 	if err != nil {
@@ -256,6 +260,7 @@ func ResToStruct(b *http.Response, s interface{}) error {
 	return nil
 }
 
+// RespToStruct --
 func RespToStruct(b []byte, s interface{}) error {
 
 	if err := json.Unmarshal(b, s); err != nil {
@@ -265,13 +270,15 @@ func RespToStruct(b []byte, s interface{}) error {
 	return nil
 }
 
+// ByteToString --
 func ByteToString(b []byte) string {
 	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
 	sh := reflect.StringHeader{Data: bh.Data, Len: bh.Len}
 	return *(*string)(unsafe.Pointer(&sh))
 }
 
-func ByteToJson(b *http.Response) string {
+// ByteToJSON --
+func ByteToJSON(b *http.Response) string {
 	bs := make([]byte, 1014)
 	js := ""
 	for true {
