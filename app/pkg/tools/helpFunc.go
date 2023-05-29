@@ -85,7 +85,7 @@ func RangeInt(min int, max int, n int) []int {
 
 // PhotoWall upload file (on filePath) to given url.
 // Return info about uploaded photo.
-func PhotoWall(url, filePath string) (*structs.UploadPhotoWallResponse, error) {
+func PhotoWall(url, filePath string) (*structs.SavePhotoWallResponse, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
@@ -132,7 +132,7 @@ func PhotoWall(url, filePath string) (*structs.UploadPhotoWallResponse, error) {
 		return nil, err
 	}
 
-	var uploaded structs.UploadPhotoWallResponse
+	var uploaded structs.SavePhotoWallResponse
 
 	err = json.Unmarshal(body, &uploaded)
 	if err != nil {
@@ -142,50 +142,62 @@ func PhotoWall(url, filePath string) (*structs.UploadPhotoWallResponse, error) {
 	return &uploaded, nil
 }
 
-/*
-func PhotoGroup(url, filePath string) (models.UploadPhotoResponse, error) {
+// PhotoGroup --
+func PhotoGroup(url, filePath string) (structs.UploadPhotoResponse, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
 	fileWriter, err := bodyWriter.CreateFormFile("file1", filePath)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
 
 	fh, err := os.Open(filePath)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
-	defer fh.Close()
+	defer func(fh *os.File) {
+		err := fh.Close()
+		if err != nil {
+			panic("")
+		}
+	}(fh)
 
 	_, err = io.Copy(fileWriter, fh)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
 
 	contentType := bodyWriter.FormDataContentType()
-	bodyWriter.Close()
+	err = bodyWriter.Close()
+	if err != nil {
+		return structs.UploadPhotoResponse{}, err
+	}
 
 	resp, err := http.Post(url, contentType, bodyBuf)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			panic("")
+		}
+	}(resp.Body)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
 
-	var uploaded models.UploadPhotoResponse
+	var uploaded structs.UploadPhotoResponse
 	err = json.Unmarshal(body, &uploaded)
 	if err != nil {
-		return models.UploadPhotoResponse{}, err
+		return structs.UploadPhotoResponse{}, err
 	}
 
 	return uploaded, nil
 }
-*/
 
 // Request provides access to VK API methods.
 func Request(s string, method string, params map[string]string, st interface{}) ([]byte, error) {

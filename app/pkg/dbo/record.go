@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-// ManagerDBO --
-type ManagerDBO struct {
+// RecordDBO --
+type RecordDBO struct {
 	UUID      string
 	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string
-	Status    status.ManagerStatusEnum
+	Status    status.RecordStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

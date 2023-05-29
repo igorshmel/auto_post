@@ -67,13 +67,13 @@ type VkVideoGet struct {
 	} `json:"response"`
 }
 
-// VkGetWallUploadS --
-type VkGetWallUploadS struct {
-	Response VkGetWallUploadServer `json:"response"`
-}
-
 // VkGetWallUploadServer --
 type VkGetWallUploadServer struct {
+	Response VkGetWallUploadServerResponse `json:"response"`
+}
+
+// VkGetWallUploadServerResponse --
+type VkGetWallUploadServerResponse struct {
 	UploadURL string `json:"upload_url"`
 }
 

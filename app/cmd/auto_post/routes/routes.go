@@ -4,7 +4,7 @@ import (
 	"auto_post/app/internal/adapters/repository"
 	"auto_post/app/internal/adapters/transport/rest"
 	manager "auto_post/app/internal/domains/manager"
-	vkMachine "auto_post/app/internal/domains/manager"
+	vkMachine "auto_post/app/internal/domains/vk_machine"
 	"auto_post/app/internal/usecase/api"
 	"auto_post/app/pkg/config"
 	"auto_post/app/pkg/dto"
@@ -29,8 +29,9 @@ func registerRoutes(
 	v1 := apiGroup.Group("/v1")
 
 	// Создание usecase
-	createRecordUseCase := api.NewCreateRecordUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
-	downloadImageUseCase := api.NewDownloadImageUseCase(log, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
+	createRecordUseCase := api.NewCreateRecordUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort(), vkMachineDomain.GetVkMachinePorts())
+	downloadImageUseCase := api.NewDownloadImageUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
+	vkWallUploadUseCase := api.NewVKWallPostUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), vkMachineDomain.GetVkMachinePorts())
 
 	// Создание обработчиков запросов
 	createRecordEndpoint := rest.NewCreateRecordEndpoint(createRecordUseCase, log)
@@ -50,6 +51,15 @@ func registerRoutes(
 			log.Error("failed execute DownloadImageInside with error: %s ", err.Error())
 		}
 		log.Info("DownloadImageEvent: %v", downloadImageEvent)
+	})
+
+	// add listener on event
+	bellEvent.Listen(constants.VkWallUploadEventName, func(msg bell.Message) {
+		vkWallUploadEvent := msg.(events.VkWallUploadEvent)
+		if err := vkWallUploadUseCase.Execute(nil); err != nil {
+			log.Error("failed execute VkWallUploadEvent with error: %s ", err.Error())
+		}
+		log.Info("VkWallUploadEvent: %v", vkWallUploadEvent)
 	})
 }
 

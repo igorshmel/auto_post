@@ -2,6 +2,7 @@ package api
 
 import (
 	"auto_post/app/pkg/config"
+	"auto_post/app/pkg/ddo"
 	"auto_post/app/pkg/errs"
 	"auto_post/app/pkg/events"
 	"auto_post/app/pkg/vars/constants"
@@ -17,12 +18,13 @@ import (
 
 // CreateRecordUseCase _
 type CreateRecordUseCase struct {
-	cfg           config.Config
-	log           logger.Logger
-	bell          *bell.Events
-	persister     port.Persister
-	extractor     port.Extractor
-	managerDomain port.ManagerDomain
+	cfg             config.Config
+	log             logger.Logger
+	bell            *bell.Events
+	persister       port.Persister
+	extractor       port.Extractor
+	managerDomain   port.ManagerDomain
+	vkMachineDomain port.VkMachineDomain
 }
 
 // NewCreateRecordUseCase _
@@ -33,8 +35,17 @@ func NewCreateRecordUseCase(
 	persister port.Persister,
 	extractor port.Extractor,
 	managerDomain port.ManagerDomain,
+	vkMachineDomain port.VkMachineDomain,
 ) port.CreateRecordUseCase {
-	return CreateRecordUseCase{cfg: cfg, log: log, bell: events, persister: persister, extractor: extractor, managerDomain: managerDomain}
+	return CreateRecordUseCase{
+		cfg:             cfg,
+		log:             log,
+		bell:            events,
+		persister:       persister,
+		extractor:       extractor,
+		managerDomain:   managerDomain,
+		vkMachineDomain: vkMachineDomain,
+	}
 }
 
 // Execute _
@@ -46,6 +57,9 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 	// ---------------------------------------------------------------------------------------------------------------------------
 	reqCreateRecordDDO := mapping.CreateRecordDTOtoDDO(req)
 	resCreateRecordDDO := ths.managerDomain.CreateRecord(reqCreateRecordDDO)
+
+	reqGetPath := ddo.VKMachine{FileName: resCreateRecordDDO.UUID}
+	path := ths.vkMachineDomain.GetPath(&reqGetPath)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -79,7 +93,7 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 		constants.DownloadImageEventName,
 		events.DownloadImageEvent{
 			Link:   resCreateRecordDDO.URL,
-			Output: ths.cfg.DownloadMachine.Path + resCreateRecordDDO.UUID + ".jpg",
+			Output: path,
 		}); err != nil {
 
 		ths.log.Error("unable send event DownloadImage with error: %s", err.Error())

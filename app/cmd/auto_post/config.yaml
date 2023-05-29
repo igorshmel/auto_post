@@ -53,4 +53,4 @@ vk_config:
   pre_timeOut: 1600
 
 download_machine:
-  path: /home/shmel/Public/
+  path: /home/shmel/Public

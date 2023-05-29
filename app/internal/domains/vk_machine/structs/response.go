@@ -23,8 +23,8 @@ type Empty struct{}
 //	Next   string `json:"next"`
 //}
 
-// UploadPhotoWallResponse --
-type UploadPhotoWallResponse struct {
+// SavePhotoWallResponse --
+type SavePhotoWallResponse struct {
 	Server int    `json:"server"`
 	Photo  string `json:"photo"`
 	Hash   string `json:"hash"`

@@ -36,7 +36,7 @@ func (m *MockExtractor) EXPECT() *MockExtractorMockRecorder {
 }
 
 // GetByUUID mocks base method.
-func (m *MockExtractor) GetByUUID(fileDBO *dbo.ManagerDBO) error {
+func (m *MockExtractor) GetByUUID(fileDBO *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetByUUID", fileDBO)
 	ret0, _ := ret[0].(error)
@@ -73,7 +73,7 @@ func (m *MockPersister) EXPECT() *MockPersisterMockRecorder {
 }
 
 // SaveNewFile mocks base method.
-func (m *MockPersister) CreateRecord(fileDBO *dbo.ManagerDBO) error {
+func (m *MockPersister) CreateRecord(fileDBO *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateRecord", fileDBO)
 	ret0, _ := ret[0].(error)
@@ -101,7 +101,7 @@ func (mr *MockPersisterMockRecorder) UnitOfWork(arg0 interface{}) *gomock.Call {
 }
 
 // UpdateFileStatus mocks base method.
-func (m *MockPersister) UpdateRecordStatus(fileDBO *dbo.ManagerDBO) error {
+func (m *MockPersister) UpdateRecordStatus(fileDBO *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateRecordStatus", fileDBO)
 	ret0, _ := ret[0].(error)

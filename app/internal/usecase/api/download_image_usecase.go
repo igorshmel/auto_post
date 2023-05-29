@@ -3,14 +3,18 @@ package api
 import (
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
+	"auto_post/app/pkg/events"
 	logger "auto_post/app/pkg/log"
 	"auto_post/app/pkg/tools"
+	"auto_post/app/pkg/vars/constants"
 	"context"
+	"github.com/nuttech/bell/v2"
 )
 
 // DownloadImageUseCase _
 type DownloadImageUseCase struct {
 	log       logger.Logger
+	bell      *bell.Events
 	persister port.Persister
 	extractor port.Extractor
 	imager    port.ManagerDomain
@@ -19,10 +23,11 @@ type DownloadImageUseCase struct {
 // NewDownloadImageUseCase _
 func NewDownloadImageUseCase(
 	log logger.Logger,
+	bell *bell.Events,
 	persister port.Persister,
 	extractor port.Extractor,
 	filer port.ManagerDomain) port.DownloadImageUseCase {
-	return DownloadImageUseCase{log: log, persister: persister, extractor: extractor, imager: filer}
+	return DownloadImageUseCase{log: log, bell: bell, persister: persister, extractor: extractor, imager: filer}
 }
 
 // Execute _
@@ -35,6 +40,21 @@ func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.DownloadIm
 	}
 
 	log.Debug("success download file")
+
+	// -- Периферия --
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	// отправка события в домен VkMachineDomain
+	if err := ths.bell.Ring(
+		constants.VkWallUploadEventName,
+		events.VkWallUploadEvent{
+			FileName: "",
+		}); err != nil {
+
+		ths.log.Error("unable send event VkWallUpload with error: %s", err.Error())
+	}
+
+	log.Debug("send VkWallUploadEvent success!")
 
 	return nil
 }

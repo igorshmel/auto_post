@@ -9,7 +9,7 @@ import (
 )
 
 // CreateRecord --
-func (ths *SQLStore) CreateRecord(dbo *dbo.ManagerDBO) error {
+func (ths *SQLStore) CreateRecord(dbo *dbo.RecordDBO) error {
 	if ths == nil || ths.db == nil {
 		return errors.New(errs.MsgEmptyDbPointer)
 	}
@@ -17,7 +17,7 @@ func (ths *SQLStore) CreateRecord(dbo *dbo.ManagerDBO) error {
 		return errors.New(errs.MsgEmptyInputData)
 	}
 
-	model := mapping.ManagerDBOtoModel(dbo)
+	model := mapping.RecordDBOtoModel(dbo)
 	if err := ths.db.Table(model.TableName()).
 		Create(&model).Error; err != nil {
 		return err
@@ -26,7 +26,7 @@ func (ths *SQLStore) CreateRecord(dbo *dbo.ManagerDBO) error {
 }
 
 // UpdateRecordStatus --
-func (ths *SQLStore) UpdateRecordStatus(dbo *dbo.ManagerDBO) error {
+func (ths *SQLStore) UpdateRecordStatus(dbo *dbo.RecordDBO) error {
 	if ths == nil || ths.db == nil {
 		return errors.New(errs.MsgEmptyDbPointer)
 	}
