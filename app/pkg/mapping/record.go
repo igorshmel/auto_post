@@ -9,8 +9,8 @@ import (
 )
 
 // ManagerModelToDBO --
-func ManagerModelToDBO(req *models.Manager) *dbo.ManagerDBO {
-	return &dbo.ManagerDBO{
+func ManagerModelToDBO(req *models.Manager) *dbo.RecordDBO {
+	return &dbo.RecordDBO{
 		URL:     req.URL,
 		Service: req.Service,
 		Status:  req.Status,
@@ -31,8 +31,8 @@ func CreateRecordDTOtoDDO(req *dto.CreateRecordReqDTO) *ddo.CreateRecordRequestD
 }
 
 // CreateRecordDDOtoDBO --
-func CreateRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.ManagerDBO {
-	return &dbo.ManagerDBO{
+func CreateRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.RecordDBO {
+	return &dbo.RecordDBO{
 		UUID:      ddo.UUID,
 		URL:       ddo.URL,
 		AuthURL:   ddo.AuthURL,
@@ -44,8 +44,8 @@ func CreateRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.ManagerDBO {
 	}
 }
 
-// ManagerDBOtoModel --
-func ManagerDBOtoModel(dbo *dbo.ManagerDBO) *models.Manager {
+// RecordDBOtoModel --
+func RecordDBOtoModel(dbo *dbo.RecordDBO) *models.Manager {
 	base := basis.BaseModel{}
 	base.UUID = dbo.UUID
 	base.CreatedAt = dbo.CreatedAt
@@ -57,5 +57,13 @@ func ManagerDBOtoModel(dbo *dbo.ManagerDBO) *models.Manager {
 		Status:    dbo.Status,
 		Hash:      dbo.Hash,
 		BaseModel: base,
+	}
+}
+
+// RecordDbOtoVkMachineDDO --
+func RecordDbOtoVkMachineDDO(req *dbo.RecordDBO) *ddo.VKMachine {
+	return &ddo.VKMachine{
+		FileName: req.UUID,
+		URL:      req.URL,
 	}
 }

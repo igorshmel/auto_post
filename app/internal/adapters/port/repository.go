@@ -6,12 +6,12 @@ import "auto_post/app/pkg/dbo"
 
 // Extractor - объект для извлечения данных из БД
 type Extractor interface {
-	GetByActiveStatus(*dbo.ManagerDBO) error
+	GetByActiveStatus(*dbo.RecordDBO) error
 }
 
 // Persister - объект для сохранения данных в БД
 type Persister interface {
-	UpdateRecordStatus(*dbo.ManagerDBO) error
-	CreateRecord(*dbo.ManagerDBO) error
+	UpdateRecordStatus(*dbo.RecordDBO) error
+	CreateRecord(*dbo.RecordDBO) error
 	UnitOfWork(func(Persister) error) (err error)
 }

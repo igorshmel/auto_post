@@ -52,7 +52,7 @@ func NewPostgresRepository(cfg config.Config, log logger.Logger, migrate bool) (
 func migrateData(db *gorm.DB) error {
 	// Создаём перечисления в БД перед миграциями основных моделей
 	enums := []MigrateEnum{
-		new(status.ManagerStatusEnum),
+		new(status.RecordStatusEnum),
 	}
 
 	for _, enum := range enums {

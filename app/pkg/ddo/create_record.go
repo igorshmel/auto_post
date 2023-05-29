@@ -22,7 +22,7 @@ type CreateRecordResponseDDO struct {
 	AuthURL   string
 	Service   string
 	Hash      string
-	Status    status.ManagerStatusEnum
+	Status    status.RecordStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

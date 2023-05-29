@@ -48,7 +48,7 @@ func (ths *Manager) readRecord() *ddo.CreateRecordResponseDDO {
 		URL:       ths.URL,
 		AuthURL:   ths.AuthURL,
 		Service:   ths.Service,
-		Status:    status.ManagerStatusEnum(ths.Status),
+		Status:    status.RecordStatusEnum(ths.Status),
 		Hash:      ths.Hash,
 		UpdatedAt: ths.updatedAt,
 		CreatedAt: ths.createdAt,
