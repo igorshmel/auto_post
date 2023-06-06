@@ -2,9 +2,9 @@ package errs
 
 // Error constants
 const (
-	MsgEmptyDbPointer = "database pointer is empty"
-	MsgEmptyInputData = "input data is empty"
-	MsgNotFound       = "not found"
+	MsgEmptyDbPointer = "ERR_DATABASE_POINTER_IS_EMPTY"
+	MsgEmptyInputData = "ERR_INPUT_DATA_IS_EMPTY"
+	MsgNotFound       = "ERR_NOT_FOUND"
 
 	UnknownError = "ERR_UNKNOWN_ERROR"
 )
@@ -21,7 +21,7 @@ type CommonErrorResponse struct {
 // NewCommonErrorResponse is constructor
 func NewCommonErrorResponse(code int, reason string, context string, kbLink string) *CommonErrorResponse {
 	return &CommonErrorResponse{
-		Domain:  "dfa_auto_post/",
+		Domain:  "lic_auto_post/",
 		Code:    code,
 		Reason:  reason,
 		Context: context,

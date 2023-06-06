@@ -1,4 +1,6 @@
-package events
+package deo
+
+// data event object
 
 // VkWallUploadEvent - структура события для публикации картинки на стену группы в ВК
 type VkWallUploadEvent struct {

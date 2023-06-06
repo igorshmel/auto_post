@@ -3,10 +3,8 @@ package api
 import (
 	"auto_post/app/internal/adapters/port"
 	"auto_post/app/pkg/dto"
-	"auto_post/app/pkg/events"
 	logger "auto_post/app/pkg/log"
 	"auto_post/app/pkg/tools"
-	"auto_post/app/pkg/vars/constants"
 	"context"
 	"github.com/nuttech/bell/v2"
 )
@@ -45,16 +43,16 @@ func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.DownloadIm
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	// отправка события в домен VkMachineDomain
-	if err := ths.bell.Ring(
-		constants.VkWallUploadEventName,
-		events.VkWallUploadEvent{
-			FileName: "",
-		}); err != nil {
+	/*	if err := ths.bell.Ring(
+			constants.VkWallUploadEventName,
+			deo.VkWallUploadEvent{
+				FileName: "",
+			}); err != nil {
 
-		ths.log.Error("unable send event VkWallUpload with error: %s", err.Error())
-	}
+			ths.log.Error("unable send event VkWallUpload with error: %s", err.Error())
+		}
 
-	log.Debug("send VkWallUploadEvent success!")
+		log.Debug("send VkWallUploadEvent success!")*/
 
 	return nil
 }

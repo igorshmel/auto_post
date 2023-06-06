@@ -44,8 +44,11 @@ func (ths VKWallPostUseCase) Execute(ctx context.Context) error {
 	// Выгрузка случайной записи из БД
 	recordDBO := dbo.RecordDBO{}
 	if err := ths.extractor.GetByActiveStatus(&recordDBO); err != nil {
+		if err.Error() == errs.MsgNotFound {
+			return extErr(errs.MsgNotFound, msg("DB_ERR: no one record found"), log)
+		}
 		return extErr(errs.UnknownError, // TODO актуализировать константы ошибок
-			msg("failed to get RND entity by active status with error: %s", err.Error()), log)
+			msg("DB_ERR: failed to get RND entity by active status: %s", err.Error()), log)
 	}
 
 	log.Debug("recordDBO: %v", recordDBO)

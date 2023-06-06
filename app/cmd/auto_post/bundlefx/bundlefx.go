@@ -1,7 +1,9 @@
 package bundlefx
 
 import (
+	"auto_post/app/cmd/auto_post/chan_os"
 	"auto_post/app/cmd/auto_post/configs"
+	"auto_post/app/cmd/auto_post/cron"
 	"auto_post/app/cmd/auto_post/domains"
 	"auto_post/app/cmd/auto_post/events"
 	"auto_post/app/cmd/auto_post/ginserver"
@@ -10,11 +12,15 @@ import (
 	"auto_post/app/cmd/auto_post/repo"
 	"auto_post/app/cmd/auto_post/routes"
 	"auto_post/app/pkg/config"
+	"auto_post/app/pkg/deo"
 	logger "auto_post/app/pkg/log"
+	"auto_post/app/pkg/vars/constants"
 	"context"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-co-op/gocron"
+	"github.com/nuttech/bell/v2"
 	"go.uber.org/fx"
 )
 
@@ -26,12 +32,15 @@ var Module = fx.Options(
 	routes.Module,
 	repo.Module,
 	events.Module,
+	cron.Module,
+	chan_os.Module,
 	domains.ManagerDomainModule,
 	domains.VkMachineDomainModule,
 
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),
 	fx.Invoke(manageServer),
+	fx.Invoke(setCron),
 )
 
 // manageServer управляет запуском и остановкой сервера
@@ -86,4 +95,30 @@ func setGinMiddlewares(router *gin.Engine) {
 	router.Use(middleware.MakeRequestIDGinMiddleware())
 	// recovery middleware
 	router.Use(gin.Recovery())
+}
+
+func setCron(
+	log logger.Logger,
+	cron *cron.Runner,
+	bellEvent *bell.Events,
+) {
+	task := func(in string, job gocron.Job) {
+		fmt.Printf("this job's last run: %s this job's next run: %s\n", job.LastRun(), job.NextRun())
+		fmt.Printf("in argument is %s\n", in)
+
+		// отправка события в домен VkMachineDomain
+		if err := bellEvent.Ring(
+			constants.VkWallUploadEventName, deo.VkWallUploadEvent{FileName: ""}); err != nil {
+			log.Error("unable send event VkWallUpload with error: %s", err.Error())
+		}
+
+		log.Debug("sendEvent VkWallUploadEvent success!")
+	}
+
+	// Конфигурируем время и частоту выполнения задачи
+	if _, err := cron.Cron("*/1 * * * *").DoWithJobDetails(task, "foo"); err != nil {
+		log.Error("unable to set the task: %s", err)
+		return
+	}
+	cron.StartAsync()
 }
