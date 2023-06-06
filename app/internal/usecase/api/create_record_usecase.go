@@ -3,8 +3,8 @@ package api
 import (
 	"auto_post/app/pkg/config"
 	"auto_post/app/pkg/ddo"
+	"auto_post/app/pkg/deo"
 	"auto_post/app/pkg/errs"
-	"auto_post/app/pkg/events"
 	"auto_post/app/pkg/vars/constants"
 	"context"
 	"fmt"
@@ -91,7 +91,7 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 	// отправка события в домен DownloadDomain
 	if err := ths.bell.Ring(
 		constants.DownloadImageEventName,
-		events.DownloadImageEvent{
+		deo.DownloadImageEvent{
 			Link:   resCreateRecordDDO.URL,
 			Output: path,
 		}); err != nil {

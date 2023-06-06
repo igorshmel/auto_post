@@ -7,8 +7,8 @@ import (
 	vkMachine "auto_post/app/internal/domains/vk_machine"
 	"auto_post/app/internal/usecase/api"
 	"auto_post/app/pkg/config"
+	"auto_post/app/pkg/deo"
 	"auto_post/app/pkg/dto"
-	"auto_post/app/pkg/events"
 	logger "auto_post/app/pkg/log"
 	"auto_post/app/pkg/vars/constants"
 	"github.com/gin-gonic/gin"
@@ -43,7 +43,7 @@ func registerRoutes(
 
 	// add listener on event
 	bellEvent.Listen(constants.DownloadImageEventName, func(msg bell.Message) {
-		downloadImageEvent := msg.(events.DownloadImageEvent)
+		downloadImageEvent := msg.(deo.DownloadImageEvent)
 		if err := downloadImageUseCase.Execute(nil, &dto.DownloadImageReqDTO{
 			URL:    downloadImageEvent.Link,
 			Output: downloadImageEvent.Output,
@@ -55,11 +55,10 @@ func registerRoutes(
 
 	// add listener on event
 	bellEvent.Listen(constants.VkWallUploadEventName, func(msg bell.Message) {
-		vkWallUploadEvent := msg.(events.VkWallUploadEvent)
+
 		if err := vkWallUploadUseCase.Execute(nil); err != nil {
-			log.Error("failed execute VkWallUploadEvent with error: %s ", err.Error())
+			log.Error("startEvent VkWallUploadEvent fail with error: %s ", err.Error())
 		}
-		log.Info("VkWallUploadEvent: %v", vkWallUploadEvent)
 	})
 }
 

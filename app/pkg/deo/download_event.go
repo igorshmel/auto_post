@@ -1,4 +1,6 @@
-package events
+package deo
+
+// data event object
 
 // DownloadImageEvent - структура события для скачивания изображения
 type DownloadImageEvent struct {
