@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	"go.uber.org/fx"
 )
 

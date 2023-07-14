@@ -1,13 +1,13 @@
 package vkmachine
 
 import (
-	"auto_post/app/internal/domains/vk_machine/structs"
-	"auto_post/app/pkg/config"
-	"auto_post/app/pkg/ddo"
-	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/tools"
-	"auto_post/app/pkg/vars/constants"
 	"fmt"
+	"github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine/structs"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/tools"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"strings"
 )
 

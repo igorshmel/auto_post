@@ -1,9 +1,9 @@
 package models
 
 import (
-	"auto_post/app/internal/adapters/repository/models/basis"
-	"auto_post/app/pkg/vars/constants"
-	"auto_post/app/pkg/vars/statuses"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models/basis"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 )
 
 // Manager - модель

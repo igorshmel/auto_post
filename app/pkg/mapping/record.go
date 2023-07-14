@@ -1,11 +1,11 @@
 package mapping
 
 import (
-	"auto_post/app/internal/adapters/repository/models"
-	"auto_post/app/internal/adapters/repository/models/basis"
-	"auto_post/app/pkg/dbo"
-	"auto_post/app/pkg/ddo"
-	"auto_post/app/pkg/dto"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models/basis"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 )
 
 // ManagerModelToDBO --

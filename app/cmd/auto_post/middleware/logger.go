@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	logger "auto_post/app/pkg/log"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // SetRequestIDPrefix set the prefix with request id for logger

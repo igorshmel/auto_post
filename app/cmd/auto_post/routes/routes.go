@@ -1,17 +1,17 @@
 package routes
 
 import (
-	"auto_post/app/internal/adapters/repository"
-	"auto_post/app/internal/adapters/transport/rest"
-	manager "auto_post/app/internal/domains/manager"
-	vkMachine "auto_post/app/internal/domains/vk_machine"
-	"auto_post/app/internal/usecase/api"
-	"auto_post/app/pkg/config"
-	"auto_post/app/pkg/deo"
-	"auto_post/app/pkg/dto"
-	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/vars/constants"
 	"github.com/gin-gonic/gin"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/transport/rest"
+	manager "github.com/igorshmel/lic_auto_post/app/internal/domains/manager"
+	vkMachine "github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine"
+	"github.com/igorshmel/lic_auto_post/app/internal/usecase/api"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"github.com/nuttech/bell/v2"
 	"go.uber.org/fx"
 )

@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 
-	"auto_post/app/pkg/dto"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 )
 
 // CreateRecordUseCase --

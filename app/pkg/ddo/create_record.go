@@ -1,7 +1,7 @@
 package ddo
 
 import (
-	status "auto_post/app/pkg/vars/statuses"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"time"
 )
 

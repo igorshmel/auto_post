@@ -1,9 +1,9 @@
 package parsemachine
 
 import (
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // DomConfiguration --

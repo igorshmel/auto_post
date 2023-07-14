@@ -1,9 +1,9 @@
 package domains
 
 import (
-	manager "auto_post/app/internal/domains/manager"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
+	manager "github.com/igorshmel/lic_auto_post/app/internal/domains/manager"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 

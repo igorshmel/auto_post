@@ -1,7 +1,7 @@
 package log
 
 import (
-	logger "auto_post/app/pkg/log"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 

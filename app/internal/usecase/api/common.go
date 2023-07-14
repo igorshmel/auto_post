@@ -1,8 +1,8 @@
 package api
 
 import (
-	"auto_post/app/pkg/errs"
-	logger "auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 func extErr(code string, msg string, log logger.Logger) error {
