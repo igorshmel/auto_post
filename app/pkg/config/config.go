@@ -22,6 +22,21 @@ var (
 	errWrongFileName      = fmt.Errorf("wrong the file name")
 )
 
+// DownloadMachine - настройки загрузчика
+type DownloadMachine struct {
+	Path string `mapstructure:"path" validate:"required"`
+}
+
+// VKConfig - настройки api социальной сети ВК
+type VKConfig struct {
+	PreTimeOut  int    `mapstructure:"pre_time_out" `
+	MaxHashTags int    `mapstructure:"max_hash_tags"`
+	VkHashTags  string `mapstructure:"vk_hash_tags" validate:"required"`
+	VkToken     string `mapstructure:"vk_token" validate:"required"`
+	VkGroupID   string `mapstructure:"vk_group_id" validate:"required"`
+	VkAlbumID   string `mapstructure:"vk_album_id" validate:"required"`
+}
+
 // AppConfig - общие настройки приложения
 type AppConfig struct {
 	Port string `mapstructure:"port" validate:"required"`
@@ -108,6 +123,12 @@ type Config struct {
 
 	// Настройки Schema Registry
 	SchemaRegistry SchemaRegistryConfig `mapstructure:"schema_registry"`
+
+	// Настройки VkConfig
+	VkConfig VKConfig `mapstructure:"vk_config"`
+
+	// Настройки загрузчика
+	DownloadMachine DownloadMachine `mapstructure:"download_machine"`
 }
 
 // CreateDSN create a dsn string for postgres

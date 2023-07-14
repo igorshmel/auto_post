@@ -1,12 +1,12 @@
 package ddo
 
 import (
-	status "auto_post/app/pkg/vars/statuses"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"time"
 )
 
-// ParseImageReqDDO --
-type ParseImageReqDDO struct {
+// CreateRecordRequestDDO --
+type CreateRecordRequestDDO struct {
 	UUID    string
 	URL     string
 	AuthURL string
@@ -15,14 +15,14 @@ type ParseImageReqDDO struct {
 	Status  string
 }
 
-// ParseImageResDDO --
-type ParseImageResDDO struct {
+// CreateRecordResponseDDO --
+type CreateRecordResponseDDO struct {
 	UUID      string
 	URL       string
 	AuthURL   string
 	Service   string
 	Hash      string
-	Status    status.ParseImageStatusEnum
+	Status    status.RecordStatusEnum
 	UpdatedAt *time.Time
 	CreatedAt time.Time
 }

@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"auto_post/app/internal/adapters/repository/models"
-	"auto_post/app/pkg/config"
-	status "auto_post/app/pkg/vars/statuses"
-	log "git.fintechru.org/dfa/dfa_lib/logger"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,11 +17,11 @@ type MigrateEnum interface {
 // SQLStore fulfills the Extractor and Persister document interfaces
 type SQLStore struct {
 	db  *gorm.DB
-	log log.Logger
+	log logger.Logger
 }
 
 // NewPostgresRepository returns a memory repository instance
-func NewPostgresRepository(cfg config.Config, log log.Logger, migrate bool) (*SQLStore, error) {
+func NewPostgresRepository(cfg config.Config, log logger.Logger, migrate bool) (*SQLStore, error) {
 	dbGorm, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: cfg.CreateDSN(),
 	}))
@@ -52,7 +52,7 @@ func NewPostgresRepository(cfg config.Config, log log.Logger, migrate bool) (*SQ
 func migrateData(db *gorm.DB) error {
 	// Создаём перечисления в БД перед миграциями основных моделей
 	enums := []MigrateEnum{
-		new(status.ParseImageStatusEnum),
+		new(status.RecordStatusEnum),
 	}
 
 	for _, enum := range enums {
@@ -62,6 +62,6 @@ func migrateData(db *gorm.DB) error {
 	}
 
 	return db.AutoMigrate(
-		&models.ParseImage{},
+		&models.Manager{},
 	)
 }

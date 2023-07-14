@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // SetRequestIDPrefix set the prefix with request id for logger

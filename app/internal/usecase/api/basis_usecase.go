@@ -3,9 +3,9 @@ package api
 import (
 	"context"
 
-	"auto_post/app/cmd/auto_post/middleware"
-	"auto_post/app/internal/adapters/port"
-	"git.fintechru.org/dfa/dfa_lib/logger"
+	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/middleware"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // BasisUseCase --

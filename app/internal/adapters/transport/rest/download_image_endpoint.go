@@ -3,12 +3,12 @@ package rest
 import (
 	"net/http"
 
-	"auto_post/app/cmd/auto_post/middleware"
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/pkg/dto"
-	"git.fintechru.org/dfa/dfa_lib/errs"
-	"git.fintechru.org/dfa/dfa_lib/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/middleware"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // DownloadImageEndpoint --
@@ -18,17 +18,17 @@ type DownloadImageEndpoint struct {
 }
 
 // NewDownloadImageEndpoint --
-func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.Endpoint {
+func NewDownloadImageEndpoint(usecase port.DownloadImageUseCase, log logger.Logger) port.DownloadEndpoint {
 	return DownloadImageEndpoint{
 		log:     log,
 		usecase: usecase,
 	}
 }
 
-// Execute is handler
-func (ths DownloadImageEndpoint) Execute(ctx *gin.Context) {
+// DownloadExecute is handler
+func (ths DownloadImageEndpoint) DownloadExecute(ctx *gin.Context) {
 	ths.log = middleware.SetRequestIDPrefix(ctx, ths.log)
-	log := ths.log.WithMethod("endpoint InitParseImage")
+	log := ths.log.WithMethod("endpoint CreateRecord")
 
 	req := dto.NewDownloadImageReq()
 

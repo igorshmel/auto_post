@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 )
 
 var _ port.Persister = (*SQLStore)(nil)
