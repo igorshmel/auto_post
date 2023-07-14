@@ -3,12 +3,12 @@ package rest
 import (
 	"net/http"
 
-	"auto_post/app/cmd/auto_post/middleware"
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/pkg/dto"
-	"auto_post/app/pkg/errs"
-	logger "auto_post/app/pkg/log"
 	"github.com/gin-gonic/gin"
+	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/middleware"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // CreateRecordEndpoint --

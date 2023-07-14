@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	port "auto_post/app/internal/adapters/port"
-	dbo "auto_post/app/pkg/dbo"
+	port "github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	dbo "github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

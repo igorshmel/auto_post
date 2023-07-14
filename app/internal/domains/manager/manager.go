@@ -1,15 +1,15 @@
 package parsemachine
 
 import (
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
-	status "auto_post/app/pkg/vars/statuses"
 	"crypto/sha256"
 	"encoding/base64"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"time"
 
-	"auto_post/app/pkg/ddo"
 	"github.com/google/uuid"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
 )
 
 // Manager --

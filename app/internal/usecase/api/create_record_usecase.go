@@ -1,19 +1,19 @@
 package api
 
 import (
-	"auto_post/app/pkg/config"
-	"auto_post/app/pkg/ddo"
-	"auto_post/app/pkg/deo"
-	"auto_post/app/pkg/errs"
-	"auto_post/app/pkg/vars/constants"
 	"context"
 	"fmt"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"github.com/nuttech/bell/v2"
 
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/pkg/dto"
-	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/mapping"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
 )
 
 // CreateRecordUseCase _

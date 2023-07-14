@@ -1,6 +1,6 @@
 package port
 
-import "auto_post/app/pkg/dbo"
+import "github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 
 //go:generate mockgen -source=repository.go -destination=../../mocks/repository.go -package=mocks
 

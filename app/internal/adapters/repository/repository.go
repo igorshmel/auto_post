@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/internal/adapters/repository/postgres"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/postgres"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // RepoConfiguration is an alias for a function that will take in a pointer to an Repository and modify it

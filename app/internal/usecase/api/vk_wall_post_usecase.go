@@ -1,17 +1,17 @@
 package api
 
 import (
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/internal/domains/vk_machine/structs"
-	"auto_post/app/pkg/dbo"
-	"auto_post/app/pkg/ddo"
-	"auto_post/app/pkg/errs"
-	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/mapping"
-	"auto_post/app/pkg/tools"
-	status "auto_post/app/pkg/vars/statuses"
 	"context"
 	"fmt"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine/structs"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
+	"github.com/igorshmel/lic_auto_post/app/pkg/tools"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"github.com/nuttech/bell/v2"
 	"os"
 )

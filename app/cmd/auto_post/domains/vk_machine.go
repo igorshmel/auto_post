@@ -1,9 +1,9 @@
 package domains
 
 import (
-	vkMachine "auto_post/app/internal/domains/vk_machine"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
+	vkMachine "github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 

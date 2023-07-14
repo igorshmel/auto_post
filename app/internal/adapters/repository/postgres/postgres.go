@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"auto_post/app/internal/adapters/repository/models"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
-	status "auto_post/app/pkg/vars/statuses"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

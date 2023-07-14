@@ -1,11 +1,11 @@
 package postgres
 
 import (
-	"auto_post/app/internal/adapters/repository/models"
-	"auto_post/app/pkg/dbo"
-	"auto_post/app/pkg/errs"
-	"auto_post/app/pkg/mapping"
 	"errors"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
 )
 
 // CreateRecord --

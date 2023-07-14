@@ -1,10 +1,10 @@
 package tools
 
 import (
-	"auto_post/app/internal/domains/vk_machine/structs"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine/structs"
 	"io"
 	"io/ioutil"
 	"log"

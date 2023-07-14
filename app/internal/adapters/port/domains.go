@@ -1,7 +1,7 @@
 package port
 
 import (
-	"auto_post/app/pkg/ddo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
 )
 
 // ManagerDomain interface --

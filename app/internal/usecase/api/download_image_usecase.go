@@ -1,11 +1,11 @@
 package api
 
 import (
-	"auto_post/app/internal/adapters/port"
-	"auto_post/app/pkg/dto"
-	logger "auto_post/app/pkg/log"
-	"auto_post/app/pkg/tools"
 	"context"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/tools"
 	"github.com/nuttech/bell/v2"
 )
 

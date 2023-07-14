@@ -1,4 +1,4 @@
-module auto_post
+module github.com/igorshmel/lic_auto_post
 
 go 1.17
 

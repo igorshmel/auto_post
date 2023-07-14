@@ -1,9 +1,9 @@
 package repo
 
 import (
-	"auto_post/app/internal/adapters/repository"
-	"auto_post/app/pkg/config"
-	logger "auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository"
+	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	"go.uber.org/fx"
 )
 
