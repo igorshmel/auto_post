@@ -30,15 +30,18 @@ func registerRoutes(
 
 	// Создание usecase
 	createRecordUseCase := api.NewCreateRecordUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort(), vkMachineDomain.GetVkMachinePorts())
+	proxyRecordUseCase := api.NewProxyRecordUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort(), vkMachineDomain.GetVkMachinePorts())
 	downloadImageUseCase := api.NewDownloadImageUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
 	vkWallUploadUseCase := api.NewVKWallPostUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), vkMachineDomain.GetVkMachinePorts())
 
 	// Создание обработчиков запросов
 	createRecordEndpoint := rest.NewCreateRecordEndpoint(createRecordUseCase, log)
+	proxyEndpoint := rest.NewProxyEndpoint(proxyRecordUseCase, log)
 	downloadImageEndpoint := rest.NewDownloadImageEndpoint(downloadImageUseCase, log)
 
 	// Регистрация обработчиков запросов
 	v1.POST("/init/", createRecordEndpoint.CreateRecordExecute)
+	v1.POST("/proxy/", proxyEndpoint.ProxyRecordExecute)
 	v1.POST("/download/", downloadImageEndpoint.DownloadExecute)
 
 	// add listener on event

@@ -7,6 +7,7 @@ import (
 // ManagerDomain interface --
 type ManagerDomain interface {
 	CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRecordResponseDDO
+	ProxyRecord(ddo *ddo.ProxyRecordRequestDDO) *ddo.ProxyRecordResponseDDO
 }
 
 // VkMachineDomain interface --

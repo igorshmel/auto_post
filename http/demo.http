@@ -7,3 +7,13 @@ Content-Type: application/json
   "auth_url": "artstation/shmel",
   "service": "artstation"
 }
+
+### Создание файла
+POST {{host}}/api/v1/proxy/
+Content-Type: application/json
+
+{
+  "url": "http://www.file.url",
+  "auth_url": "artstation/shmel",
+  "service": "artstation"
+}

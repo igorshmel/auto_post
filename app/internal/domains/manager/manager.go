@@ -73,6 +73,24 @@ func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRec
 	return ths.readRecord()
 }
 
+// ProxyRecord --
+func (ths *Manager) ProxyRecord(ddo *ddo.ProxyRecordRequestDDO) *ddo.ProxyRecordResponseDDO {
+	activeStatus := status.RecordActiveStatus
+
+	h := sha256.New()
+	h.Write([]byte(ddo.URL + ddo.AuthURL))
+	hashString := base64.StdEncoding.EncodeToString(h.Sum(nil))
+
+	ths.newRecord()
+	ths.URL = ddo.URL
+	ths.AuthURL = ddo.AuthURL
+	ths.Service = ddo.Service
+	ths.Status = activeStatus.Str()
+	ths.Hash = hashString
+
+	return nil
+}
+
 // recordUpdatedAt --
 func (ths *Manager) recordUpdatedAt() {
 	t := time.Now()

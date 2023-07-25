@@ -1,4 +1,4 @@
-package chan_os
+package chanos
 
 import (
 	"go.uber.org/fx"

@@ -6,7 +6,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
-	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/chan_os"
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/configs"
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/cron"
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/domains"
@@ -33,7 +32,6 @@ var Module = fx.Options(
 	repo.Module,
 	events.Module,
 	cron.Module,
-	chan_os.Module,
 	domains.ManagerDomainModule,
 	domains.VkMachineDomainModule,
 
