@@ -56,7 +56,7 @@ func registerRoutes(
 		log.Info("DownloadImageEvent: %v", downloadImageEvent)
 	})
 
-	// add listener on event
+	// прослушивание события vk_wall_upload
 	bellEvent.Listen(constants.VkWallUploadEventName, func(msg bell.Message) {
 
 		if err := vkWallUploadUseCase.Execute(nil); err != nil {

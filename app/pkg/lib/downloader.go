@@ -1,4 +1,4 @@
-package tools
+package lib
 
 import (
 	"errors"
@@ -19,6 +19,7 @@ func DownloadFile(filepath string, url string) error {
 				err = errors.New("DownloadFile error resp.Body.Close(): " + fmt.Sprint(err))
 			}
 		}()
+
 		// Create the file
 		if out, err := os.Create(filepath); err == nil {
 			defer func() {

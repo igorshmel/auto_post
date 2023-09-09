@@ -49,24 +49,22 @@ func NewProxyRecordUseCase(
 // Execute _
 func (ths ProxyRecordUseCase) Execute(ctx context.Context, req *dto.ProxyRecordReqDTO) error {
 	//msg := fmt.Sprintf
-	//log := ths.log.WithMethod("usecase ProxyRecord")
+	log := ths.log.WithMethod("usecase ProxyRecord")
 
 	// -- Бизнес логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	//reqProxyRecordDDO := mapping.ProxyRecordDTOtoDDO(req)
-	//resProxyRecordDDO := ths.managerDomain.ProxyRecord(reqProxyRecordDDO)
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	// -- Периферия --
 	// ---------------------------------------------------------------------------------------------------------------------------
-
+	proxyReq := fmt.Sprintf(`{"url": "%s","auth_url": "%s", "service": "%s"}`, req.URL, req.AuthURL, req.Service)
 	// отправка данных на сервер
-	jsonBody := []byte(`{"url": "http://www.file.url","auth_url": "artstation/shmel", "service": "artstation" }`)
+	jsonBody := []byte(proxyReq)
 	bodyReader := bytes.NewReader(jsonBody)
 
-	requestURL := fmt.Sprintf("http://localhost:%s%s", ths.cfg.App.Port, "/api/v1/init/")
+	requestURL := fmt.Sprintf("http://95.163.243.113:%s%s", ths.cfg.App.Port, "/api/v1/init/")
 	reqst, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
 	if err != nil {
 		fmt.Printf("client: could not create request: %s\n", err)
@@ -79,15 +77,15 @@ func (ths ProxyRecordUseCase) Execute(ctx context.Context, req *dto.ProxyRecordR
 		os.Exit(1)
 	}
 
-	fmt.Printf("client: got response!\n")
-	fmt.Printf("client: status code: %d\n", res.StatusCode)
+	log.Info("client: got response!")
+	log.Info("client: status code: %d\n", res.StatusCode)
 
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Printf("client: could not read response body: %s\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("client: response body: %s\n", resBody)
+	log.Debug("client: response body: %s\n", resBody)
 
 	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/types"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -53,6 +54,7 @@ func migrateData(db *gorm.DB) error {
 	// Создаём перечисления в БД перед миграциями основных моделей
 	enums := []MigrateEnum{
 		new(status.RecordStatusEnum),
+		new(types.PublishTypeEnum),
 	}
 
 	for _, enum := range enums {
@@ -63,5 +65,6 @@ func migrateData(db *gorm.DB) error {
 
 	return db.AutoMigrate(
 		&models.Manager{},
+		&models.PublishCounter{},
 	)
 }

@@ -66,21 +66,9 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 	createRecordDBO := mapping.CreateRecordDDOtoDBO(resCreateRecordDDO)
 	log.Info("DBO: %v", createRecordDBO)
 
-	if err := ths.persister.UnitOfWork(func(tx port.Persister) error { // единица работы, транзакция БД
-
-		if err := ths.persister.CreateRecord(createRecordDBO); err != nil {
-			return extErr(errs.UnknownError,
-				msg("failed to create record (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
-		}
-
-		if err := ths.persister.UpdateRecordStatus(createRecordDBO); err != nil {
-			return extErr(errs.UnknownError,
-				msg("failed to update record status (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
-		}
-
-		return nil
-	}); err != nil {
-		return err
+	if err := ths.persister.CreateRecord(createRecordDBO); err != nil {
+		return extErr(errs.UnknownError,
+			msg("failed to create record (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
 	}
 
 	log.Debug("create record (uuid: %s)", createRecordDBO.UUID)

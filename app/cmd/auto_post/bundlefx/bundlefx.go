@@ -104,7 +104,7 @@ func setCron(
 		fmt.Printf("this job's last run: %s this job's next run: %s\n", job.LastRun(), job.NextRun())
 		fmt.Printf("in argument is %s\n", in)
 
-		// отправка события в домен VkMachineDomain
+		// отправка события vk_wall_upload в домен VkMachineDomain
 		if err := bellEvent.Ring(
 			constants.VkWallUploadEventName, deo.VkWallUploadEvent{FileName: ""}); err != nil {
 			log.Error("unable send event VkWallUpload with error: %s", err.Error())
@@ -114,7 +114,7 @@ func setCron(
 	}
 
 	// Конфигурируем время и частоту выполнения задачи
-	if _, err := cron.Cron("*/1 * * * *").DoWithJobDetails(task, "foo"); err != nil {
+	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(task, "foo"); err != nil {
 		log.Error("unable to set the task: %s", err)
 		return
 	}

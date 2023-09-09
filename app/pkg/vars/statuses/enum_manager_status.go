@@ -39,7 +39,7 @@ func (e *RecordStatusEnum) MigrationSQL() string {
 		DO $$ 
 		BEGIN
 			IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname = '%[1]s') THEN 
-				CREATE TYPE %[1]s AS ENUM ('active', 'using');
+				CREATE TYPE %[1]s AS ENUM ('%[2]s', '%[3]s');
 			END IF;
-		END$$;`, recordStatusEnum)
+		END$$;`, recordStatusEnum, RecordActiveStatus, RecordUsedStatus)
 }

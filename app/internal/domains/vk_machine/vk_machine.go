@@ -5,8 +5,8 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine/structs"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/lib"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
-	"github.com/igorshmel/lic_auto_post/app/pkg/tools"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"strings"
 )
@@ -77,7 +77,7 @@ func (ths VkMachine) GetTags() string {
 		tags = strings.Split(ths.cfg.VkConfig.VkHashTags, ",")
 	}
 
-	arr := tools.RangeInt(0, len(tags), ths.cfg.VkConfig.MaxHashTags)
+	arr := lib.RangeInt(0, len(tags), ths.cfg.VkConfig.MaxHashTags)
 
 	if arr != nil {
 		for r := 0; r < len(arr); r++ {
@@ -98,7 +98,7 @@ func (ths VkMachine) PostWallPhoto(req *ddo.ReqPostWallPhoto) *ddo.ResPostWallPh
 		tags = strings.Split(ths.cfg.VkConfig.VkHashTags, ",")
 	}
 
-	arr := tools.RangeInt(0, len(tags), ths.cfg.VkConfig.MaxHashTags)
+	arr := lib.RangeInt(0, len(tags), ths.cfg.VkConfig.MaxHashTags)
 
 	if arr != nil {
 		for r := 0; r < len(arr); r++ {
