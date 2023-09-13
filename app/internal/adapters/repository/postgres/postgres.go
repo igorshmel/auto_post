@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"fmt"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
@@ -37,6 +38,15 @@ func NewPostgresRepository(cfg config.Config, log logger.Logger, migrate bool) (
 
 	postgresDb.SetMaxIdleConns(10)
 	postgresDb.SetMaxOpenConns(100)
+
+	err = dbGorm.Migrator().DropTable("art_publish_counter")
+	if err != nil {
+		fmt.Println("Error Drop Table file")
+	}
+	err = dbGorm.Migrator().DropTable("cron_counter")
+	if err != nil {
+		fmt.Println("Error Drop Table file")
+	}
 
 	if migrate {
 		if err = migrateData(dbGorm); err != nil {

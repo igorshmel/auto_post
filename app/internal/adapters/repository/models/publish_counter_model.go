@@ -8,9 +8,9 @@ import (
 
 // PublishCounter - счетчик публикаций по крону
 type PublishCounter struct {
-	Date  int64                   `gorm:"not null"`                          // Date - дата публикации
-	Count int                     `gorm:"not null"`                          // Количество публикаций в день
-	Type  status.RecordStatusEnum `gorm:"type:record_status;column:status;"` // Тип публикации (название группы в VK например)
+	Date  int64                   `gorm:"not null"`                       // Date - дата публикации
+	Count int                     `gorm:"not null"`                       // Количество публикаций в день
+	Type  status.RecordStatusEnum `gorm:"type:publish_type;column:type;"` // Тип публикации (название группы в VK например)
 	basis.BaseModel
 }
 

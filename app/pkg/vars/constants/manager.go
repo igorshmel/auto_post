@@ -4,7 +4,7 @@ package constants
 const ManagerTableName = "manager"
 
 // PublishCounterTableName - имя таблицы для счетчика публикаций по крону
-const PublishCounterTableName = "cron_counter"
+const PublishCounterTableName = "art_publish_counter"
 
 // DownloadImageEventName - название события для процесса скачивания изображения по ссылке
 const DownloadImageEventName = "download_image"
