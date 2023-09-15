@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	"github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine/structs"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
@@ -45,6 +46,7 @@ func (ths VKWallPostUseCase) Execute(ctx context.Context) error {
 
 	// Получить счетчик публикаций за текущий день
 	publishCounterDBO := dbo.PublishCounterDBO{} // заполнение перенести в доменную область
+	publishCounterDBO.UUID = uuid.New().String()
 	publishCounterDBO.Date = lib.TruncateToDay(time.Now())
 	publishCounterDBO.Count = 1
 	publishCounterDBO.Type = types.ArtPublishType
