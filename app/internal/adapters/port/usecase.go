@@ -11,6 +11,11 @@ type CreateRecordUseCase interface {
 	Execute(context.Context, *dto.CreateRecordReqDTO) error
 }
 
+// ProxyRecordUseCase --
+type ProxyRecordUseCase interface {
+	Execute(context.Context, *dto.ProxyRecordReqDTO) error
+}
+
 // VKWallPostUseCase --
 type VKWallPostUseCase interface {
 	Execute(context.Context) error

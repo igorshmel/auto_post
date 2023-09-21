@@ -6,6 +6,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 )
 
 // ManagerModelToDBO --
@@ -56,6 +57,20 @@ func RecordDBOtoModel(dbo *dbo.RecordDBO) *models.Manager {
 		Service:   dbo.Service,
 		Status:    dbo.Status,
 		Hash:      dbo.Hash,
+		BaseModel: base,
+	}
+}
+
+// SetArtPublishCountDBOtoModel --
+func SetArtPublishCountDBOtoModel(dbo *dbo.PublishCounterDBO) *models.PublishCounter {
+	base := basis.BaseModel{}
+	base.UUID = dbo.UUID
+	base.CreatedAt = dbo.CreatedAt
+	base.UpdatedAt = dbo.UpdatedAt
+	return &models.PublishCounter{
+		Date:      dbo.Date,
+		Count:     dbo.Count,
+		Type:      status.RecordStatusEnum(dbo.Type),
 		BaseModel: base,
 	}
 }

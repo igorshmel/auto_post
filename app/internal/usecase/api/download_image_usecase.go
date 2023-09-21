@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
+	"github.com/igorshmel/lic_auto_post/app/pkg/lib"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
-	"github.com/igorshmel/lic_auto_post/app/pkg/tools"
 	"github.com/nuttech/bell/v2"
 )
 
@@ -32,7 +32,7 @@ func NewDownloadImageUseCase(
 func (ths DownloadImageUseCase) Execute(ctx context.Context, req *dto.DownloadImageReqDTO) error {
 	log := ths.log.WithMethod("usecase DownloadImage")
 
-	err := tools.DownloadFile(req.Output, req.URL)
+	err := lib.DownloadFile(req.Output, req.URL)
 	if err != nil {
 		log.Error("failed to download file with error: %s", err.Error())
 	}

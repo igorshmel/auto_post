@@ -5,88 +5,131 @@
 package mocks
 
 import (
+	context "context"
+	gomock "github.com/golang/mock/gomock"
 	port "github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	dbo "github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	reflect "reflect"
-
-	gomock "github.com/golang/mock/gomock"
 )
 
-// MockExtractor is a mock of Extractor interface.
+// MockExtractor is a mock of Extractor interface
 type MockExtractor struct {
 	ctrl     *gomock.Controller
 	recorder *MockExtractorMockRecorder
 }
 
-// MockExtractorMockRecorder is the mock recorder for MockExtractor.
+// MockExtractorMockRecorder is the mock recorder for MockExtractor
 type MockExtractorMockRecorder struct {
 	mock *MockExtractor
 }
 
-// NewMockExtractor creates a new mock instance.
+// NewMockExtractor creates a new mock instance
 func NewMockExtractor(ctrl *gomock.Controller) *MockExtractor {
 	mock := &MockExtractor{ctrl: ctrl}
 	mock.recorder = &MockExtractorMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockExtractor) EXPECT() *MockExtractorMockRecorder {
 	return m.recorder
 }
 
-// GetByUUID mocks base method.
-func (m *MockExtractor) GetByUUID(fileDBO *dbo.RecordDBO) error {
+// GetByActiveStatus mocks base method
+func (m *MockExtractor) GetByActiveStatus(arg0 *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByUUID", fileDBO)
+	ret := m.ctrl.Call(m, "GetByActiveStatus", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// GetByUUID indicates an expected call of GetByUUID.
-func (mr *MockExtractorMockRecorder) GetByUUID(fileDBO interface{}) *gomock.Call {
+// GetByActiveStatus indicates an expected call of GetByActiveStatus
+func (mr *MockExtractorMockRecorder) GetByActiveStatus(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByUUID", reflect.TypeOf((*MockExtractor)(nil).GetByUUID), fileDBO)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByActiveStatus", reflect.TypeOf((*MockExtractor)(nil).GetByActiveStatus), arg0)
 }
 
-// MockPersister is a mock of Persister interface.
+// GetArtPublishCountByDate mocks base method
+func (m *MockExtractor) GetArtPublishCountByDate(ctx context.Context, counterDBO *dbo.PublishCounterDBO) (uint64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetArtPublishCountByDate", ctx, counterDBO)
+	ret0, _ := ret[0].(uint64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetArtPublishCountByDate indicates an expected call of GetArtPublishCountByDate
+func (mr *MockExtractorMockRecorder) GetArtPublishCountByDate(ctx, counterDBO interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArtPublishCountByDate", reflect.TypeOf((*MockExtractor)(nil).GetArtPublishCountByDate), ctx, counterDBO)
+}
+
+// MockPersister is a mock of Persister interface
 type MockPersister struct {
 	ctrl     *gomock.Controller
 	recorder *MockPersisterMockRecorder
 }
 
-// MockPersisterMockRecorder is the mock recorder for MockPersister.
+// MockPersisterMockRecorder is the mock recorder for MockPersister
 type MockPersisterMockRecorder struct {
 	mock *MockPersister
 }
 
-// NewMockPersister creates a new mock instance.
+// NewMockPersister creates a new mock instance
 func NewMockPersister(ctrl *gomock.Controller) *MockPersister {
 	mock := &MockPersister{ctrl: ctrl}
 	mock.recorder = &MockPersisterMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use.
+// EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockPersister) EXPECT() *MockPersisterMockRecorder {
 	return m.recorder
 }
 
-// SaveNewFile mocks base method.
-func (m *MockPersister) CreateRecord(fileDBO *dbo.RecordDBO) error {
+// UpdateRecordStatus mocks base method
+func (m *MockPersister) UpdateRecordStatus(arg0 *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateRecord", fileDBO)
+	ret := m.ctrl.Call(m, "UpdateRecordStatus", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// SaveNewFile indicates an expected call of SaveNewFile.
-func (mr *MockPersisterMockRecorder) SaveNewFile(fileDBO interface{}) *gomock.Call {
+// UpdateRecordStatus indicates an expected call of UpdateRecordStatus
+func (mr *MockPersisterMockRecorder) UpdateRecordStatus(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRecord", reflect.TypeOf((*MockPersister)(nil).CreateRecord), fileDBO)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRecordStatus", reflect.TypeOf((*MockPersister)(nil).UpdateRecordStatus), arg0)
 }
 
-// UnitOfWork mocks base method.
+// CreateRecord mocks base method
+func (m *MockPersister) CreateRecord(arg0 *dbo.RecordDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateRecord", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateRecord indicates an expected call of CreateRecord
+func (mr *MockPersisterMockRecorder) CreateRecord(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRecord", reflect.TypeOf((*MockPersister)(nil).CreateRecord), arg0)
+}
+
+// SetArtPublishCount mocks base method
+func (m *MockPersister) SetArtPublishCount(ctx context.Context, countDBO *dbo.PublishCounterDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetArtPublishCount", ctx, countDBO)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetArtPublishCount indicates an expected call of SetArtPublishCount
+func (mr *MockPersisterMockRecorder) SetArtPublishCount(ctx, countDBO interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetArtPublishCount", reflect.TypeOf((*MockPersister)(nil).SetArtPublishCount), ctx, countDBO)
+}
+
+// UnitOfWork mocks base method
 func (m *MockPersister) UnitOfWork(arg0 func(port.Persister) error) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UnitOfWork", arg0)
@@ -94,22 +137,8 @@ func (m *MockPersister) UnitOfWork(arg0 func(port.Persister) error) error {
 	return ret0
 }
 
-// UnitOfWork indicates an expected call of UnitOfWork.
+// UnitOfWork indicates an expected call of UnitOfWork
 func (mr *MockPersisterMockRecorder) UnitOfWork(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnitOfWork", reflect.TypeOf((*MockPersister)(nil).UnitOfWork), arg0)
-}
-
-// UpdateFileStatus mocks base method.
-func (m *MockPersister) UpdateRecordStatus(fileDBO *dbo.RecordDBO) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateRecordStatus", fileDBO)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateFileStatus indicates an expected call of UpdateFileStatus.
-func (mr *MockPersisterMockRecorder) UpdateFileStatus(fileDBO interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRecordStatus", reflect.TypeOf((*MockPersister)(nil).UpdateRecordStatus), fileDBO)
 }
