@@ -1,11 +1,11 @@
 ### Auto_post
 This application enables automatic scheduling and random posting to a VK.ru group. The posts consist of artistic works sourced from platforms like ArtStation. The process is as follows: an administrator browses new artworks on ArtStation. If they like a particular piece and want to publish it on their VK profile group, they click the browser plugin button. The image is then sent to the application's database along with links to the original work and a description. The application subsequently determines the optimal time to create a post on the social network, without any further intervention from the administrator.
 
+The application is built on a pure DDD architecture and an event-based interaction model between domains is used
+
 ### Features
-Automatically schedule and post artworks to a VK.ru group.
-Add images along with original work links and descriptions to the application's database.
-Automatically determine the best time for posting on social media.
-Support for YouTube videos as post content.
+1. Add images along with original work links and descriptions to the application's database.
+2. Automatically schedule and post artworks to a VK.ru group.
 
 ### Getting Started
 These instructions
@@ -18,12 +18,17 @@ These instructions
 ```
 go run app/cmd/auto_post/main.go
 ```
-1. Access the application in your preferred web browser at http://localhost:5000.
-2. Log in with your VK.ru account credentials.
-3. Start adding artworks or YouTube videos to the database using the browser plugin.
-4. Configure the posting schedule and preferences in the application interface.
-5. Sit back and let the application handle the rest!
-
+For example: 
+create task request 
+```
+curl -X POST --location "http://localhost:<port>/api/v1/init/" \
+    -H "Content-Type: application/json" \
+    -d "{
+          \"url\": \"http://www.file.url/file.jpg\",
+          \"auth_url\": \"artstation/shmel\",
+          \"service\": \"artstation\"
+        }"
+```
 ### Contributing
 If you'd like to contribute to this project, please follow these steps:
 
@@ -33,5 +38,13 @@ If you'd like to contribute to this project, please follow these steps:
 4. Push to the branch (git push origin feature/your-feature)
 5. Create a new Pull Request
 
-License
-This project is licensed under the MIT License.
+### Credits
+This application was created by Igor Shmel and is maintained by the community.
+
+Special thanks to contributors for their invaluable input.
+
+### Disclaimer
+This project is not affiliated with or endorsed by VK.ru or ArtStation. It is an independent project created for educational and personal use.
+
+### License
+This project is licensed under the Apache License 2.0
