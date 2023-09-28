@@ -1,3 +1,41 @@
-  webhooks:
-    openapi:
-  info:
+openapi: 3.0.3
+info:
+    title: Profile service API
+    description: Описание API сервиса профиля пользователей
+    version: 0.0.1
+servers:
+    - url: http://localhost:10222/api
+      description: local stand
+paths:
+    /v1/init/:
+        post:
+            tags:
+                - basic methods
+            summary: init and create task
+            description: init and create task
+            requestBody:
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Init'
+            responses:
+                '200':
+                    description: success response
+                '500':
+                    description: fail response
+
+components:
+  schemas:
+    Init:
+      description: init request
+      type: object
+      properties:
+        url:
+          description: url for download file
+          type: string
+        auth_url:
+          description: author link
+          type: string
+        service:
+          description: service name
+          type: string

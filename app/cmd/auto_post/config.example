@@ -1,0 +1,24 @@
+# Application
+app:
+  port: 10222
+
+# DataBase
+database:
+  host: localhost
+  port: 5432
+  name: auto_post
+  user: postgres
+  password: 12345
+
+# VK
+vk_config:
+  vK_token: <vk_token>
+  vK_group_id: <vk_group_id>
+  vk_album_id: <vk_album_id>
+  vK_hash_Tags: <hash_tags_separated_comma>
+  max_hash_stags: 6
+  pre_timeOut: 1600
+
+# Download path
+download_machine:
+  path: /home/user/Downloads/auto_post
