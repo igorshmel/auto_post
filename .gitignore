@@ -6,4 +6,4 @@ app/out
 app/cmd/auto_post/main
 
 *.env
-*.yaml
+config.yaml
