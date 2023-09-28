@@ -1,6 +1,5 @@
 ### Auto_post
-This application enables automatic scheduling and random posting to a VK.ru group. The posts consist of artistic works sourced from platforms like ArtStation. The process is as follows: an administrator browses new artworks on ArtStation. If they like a particular piece and want to publish it on their VK profile group, they click the browser plugin button. The image is then sent to the application's database along with links to the original work and a description. The application subsequently determines the optimal time to create a post on the social network, without any further intervention from the administrator.
-
+This application allows you to automatically schedule or select a random time for publication in the VKontakte.ru group. The application is made for publishing posts that consist of artwork received from platforms such as ArtStation. The process looks like this: The administrator views new works on ArtStation. If he likes some specific material and wants to publish it in his VK profile group, he clicks the browser plugin button. The image is then sent to the app's database along with links to the original work and a description. The application subsequently determines the optimal time to create a social media post without further administrator intervention.
 The application is built on a pure DDD architecture and an event-based interaction model between domains is used
 
 ### Features
