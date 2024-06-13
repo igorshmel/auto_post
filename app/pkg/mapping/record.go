@@ -25,9 +25,11 @@ func ManagerModelToDBO(req *models.Manager) *dbo.RecordDBO {
 // CreateRecordDTOtoDDO --
 func CreateRecordDTOtoDDO(req *dto.CreateRecordReqDTO) *ddo.CreateRecordRequestDDO {
 	return &ddo.CreateRecordRequestDDO{
-		URL:     req.URL,
-		AuthURL: req.AuthURL,
-		Service: req.Service,
+		URL:         req.URL,
+		AuthURL:     req.AuthURL,
+		ImgURL:      req.ImgURL,
+		Description: req.Description,
+		Service:     req.Service,
 	}
 }
 
@@ -45,6 +47,18 @@ func CreateRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.RecordDBO {
 	}
 }
 
+// CreateMidRecordDDOtoDBO --
+func CreateMidRecordDDOtoDBO(ddo *ddo.CreateRecordResponseDDO) *dbo.RecordMidDBO {
+	return &dbo.RecordMidDBO{
+		ImgURL:      ddo.ImgURL,
+		Status:      ddo.Status,
+		Hash:        ddo.Hash,
+		Description: ddo.Description,
+		UpdatedAt:   ddo.UpdatedAt,
+		CreatedAt:   ddo.CreatedAt,
+	}
+}
+
 // RecordDBOtoModel --
 func RecordDBOtoModel(dbo *dbo.RecordDBO) *models.Manager {
 	base := basis.BaseModel{}
@@ -58,6 +72,20 @@ func RecordDBOtoModel(dbo *dbo.RecordDBO) *models.Manager {
 		Status:    dbo.Status,
 		Hash:      dbo.Hash,
 		BaseModel: base,
+	}
+}
+
+// RecordMidDBOtoModel --
+func RecordMidDBOtoModel(dbo *dbo.RecordMidDBO) *models.Midjorney {
+	base := basis.BaseModel{}
+	base.CreatedAt = dbo.CreatedAt
+	base.UpdatedAt = dbo.UpdatedAt
+	return &models.Midjorney{
+		ImgURL:      dbo.ImgURL,
+		Status:      dbo.Status,
+		Hash:        dbo.Hash,
+		Description: dbo.Description,
+		BaseModel:   base,
 	}
 }
 

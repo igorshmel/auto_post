@@ -26,6 +26,23 @@ func (ths *SQLStore) CreateRecord(dbo *dbo.RecordDBO) error {
 	return nil
 }
 
+// CreateMidRecord --
+func (ths *SQLStore) CreateMidRecord(dbo *dbo.RecordMidDBO) error {
+	if ths == nil || ths.db == nil {
+		return errors.New(errs.MsgEmptyDbPointer)
+	}
+	if dbo == nil {
+		return errors.New(errs.MsgEmptyInputData)
+	}
+
+	model := mapping.RecordMidDBOtoModel(dbo)
+	if err := ths.db.Table(model.TableName()).
+		Create(&model).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 // UpdateRecordStatus --
 func (ths *SQLStore) UpdateRecordStatus(dbo *dbo.RecordDBO) error {
 	if ths == nil || ths.db == nil {

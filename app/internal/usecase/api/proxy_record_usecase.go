@@ -59,19 +59,20 @@ func (ths ProxyRecordUseCase) Execute(ctx context.Context, req *dto.ProxyRecordR
 
 	// -- Периферия --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	proxyReq := fmt.Sprintf(`{"url": "%s","auth_url": "%s", "service": "%s"}`, req.URL, req.AuthURL, req.Service)
+	proxyReq := fmt.Sprintf(`{"url": "%s","auth_url": "%s", "service": "%s", "img_url":"%s", "description":"%s"}`, req.URL, req.AuthURL, req.Service, req.ImgURL, req.Description)
+
 	// отправка данных на сервер
 	jsonBody := []byte(proxyReq)
 	bodyReader := bytes.NewReader(jsonBody)
 
 	requestURL := fmt.Sprintf("http://95.163.243.113:%s%s", ths.cfg.App.Port, "/api/v1/init/")
-	reqst, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
+	request, err := http.NewRequest(http.MethodPost, requestURL, bodyReader)
 	if err != nil {
 		fmt.Printf("client: could not create request: %s\n", err)
 		os.Exit(1)
 	}
 
-	res, err := http.DefaultClient.Do(reqst)
+	res, err := http.DefaultClient.Do(request)
 	if err != nil {
 		fmt.Printf("client: error making http request: %s\n", err)
 		os.Exit(1)

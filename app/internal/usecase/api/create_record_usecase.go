@@ -63,15 +63,28 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
-	createRecordDBO := mapping.CreateRecordDDOtoDBO(resCreateRecordDDO)
-	log.Info("DBO: %v", createRecordDBO)
+	switch req.Service {
+	case "midjorney":
+		createMidRecordDBO := mapping.CreateMidRecordDDOtoDBO(resCreateRecordDDO)
+		log.Info("DBO: %v", createMidRecordDBO)
 
-	if err := ths.persister.CreateRecord(createRecordDBO); err != nil {
-		return extErr(errs.UnknownError,
-			msg("failed to create record (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
+		if err := ths.persister.CreateMidRecord(createMidRecordDBO); err != nil {
+			return extErr(errs.UnknownError,
+				msg("failed to create midjorney record with error: %s", err.Error()), log)
+		}
+
+		log.Debug("create midjorney record")
+	default:
+		createRecordDBO := mapping.CreateRecordDDOtoDBO(resCreateRecordDDO)
+		log.Info("DBO: %v", createRecordDBO)
+
+		if err := ths.persister.CreateRecord(createRecordDBO); err != nil {
+			return extErr(errs.UnknownError,
+				msg("failed to create record (UUID: %s) with error: %s", resCreateRecordDDO.UUID, err.Error()), log)
+		}
+
+		log.Debug("create record (uuid: %s)", createRecordDBO.UUID)
 	}
-
-	log.Debug("create record (uuid: %s)", createRecordDBO.UUID)
 
 	// -- Периферия --
 	// ---------------------------------------------------------------------------------------------------------------------------

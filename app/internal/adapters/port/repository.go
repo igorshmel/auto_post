@@ -17,6 +17,7 @@ type Extractor interface {
 type Persister interface {
 	UpdateRecordStatus(*dbo.RecordDBO) error
 	CreateRecord(*dbo.RecordDBO) error
+	CreateMidRecord(*dbo.RecordMidDBO) error
 	SetArtPublishCount(ctx context.Context, countDBO *dbo.PublishCounterDBO) error
 	UnitOfWork(func(Persister) error) (err error)
 }

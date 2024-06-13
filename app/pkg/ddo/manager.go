@@ -7,24 +7,28 @@ import (
 
 // CreateRecordRequestDDO --
 type CreateRecordRequestDDO struct {
-	UUID    string
-	URL     string
-	AuthURL string
-	Service string
-	Hash    string
-	Status  string
+	UUID        string
+	URL         string
+	AuthURL     string
+	ImgURL      string
+	Service     string
+	Description string
+	Hash        string
+	Status      string
 }
 
 // CreateRecordResponseDDO --
 type CreateRecordResponseDDO struct {
-	UUID      string
-	URL       string
-	AuthURL   string
-	Service   string
-	Hash      string
-	Status    status.RecordStatusEnum
-	UpdatedAt *time.Time
-	CreatedAt time.Time
+	UUID        string
+	URL         string
+	AuthURL     string
+	ImgURL      string
+	Service     string
+	Hash        string
+	Description string
+	Status      status.RecordStatusEnum
+	UpdatedAt   *time.Time
+	CreatedAt   time.Time
 }
 
 // ProxyRecordRequestDDO --

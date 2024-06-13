@@ -17,12 +17,14 @@ type Manager struct {
 	log logger.Logger
 	cfg config.Config
 
-	UUID    string
-	URL     string
-	AuthURL string
-	Service string
-	Hash    string
-	Status  string
+	UUID        string
+	URL         string
+	AuthURL     string
+	ImgURL      string
+	Service     string
+	Hash        string
+	Status      string
+	Description string
 
 	updatedAt *time.Time // Дата изменения записи реестра
 	createdAt time.Time  // Дата внесения записи в реестр
@@ -66,8 +68,10 @@ func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRec
 	ths.newRecord()
 	ths.URL = ddo.URL
 	ths.AuthURL = ddo.AuthURL
+	ths.ImgURL = ddo.ImgURL
 	ths.Service = ddo.Service
 	ths.Status = activeStatus.Str()
+	ths.Description = ddo.Description
 	ths.Hash = hashString
 
 	return ths.readRecord()

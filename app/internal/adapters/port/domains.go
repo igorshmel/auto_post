@@ -11,7 +11,6 @@ type ManagerDomain interface {
 
 // VkMachineDomain interface --
 type VkMachineDomain interface {
-	//UploadPhotoToServer(*ddo.VKMachine)
 	GetPath(*ddo.VKMachine) string
 	SaveWallPhoto(*ddo.ReqSaveWallPhoto) *ddo.ResSaveWallPhoto
 	GetWallUploadServer() *ddo.GetWallUploadServer

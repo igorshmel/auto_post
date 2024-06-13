@@ -13,9 +13,11 @@ func NewProxyRecordReq() *ProxyRecordReqDTO {
 
 // ProxyRecordReqDTO --
 type ProxyRecordReqDTO struct {
-	URL     string `json:"url"`
-	AuthURL string `json:"auth_url"`
-	Service string `json:"service"`
+	URL         string `json:"url"`
+	AuthURL     string `json:"auth_url"`
+	ImgURL      string `json:"img_url"`
+	Service     string `json:"service"`
+	Description string `json:"description"`
 }
 
 // Parse parses and validates the request
@@ -27,7 +29,6 @@ func (ths *ProxyRecordReqDTO) Parse(c *gin.Context) error {
 func (ths *ProxyRecordReqDTO) Validate() error {
 	return validation.ValidateStruct(ths,
 		validation.Field(&ths.URL, validation.Required.Error("is required"), is.URL),
-		validation.Field(&ths.AuthURL, validation.Required.Error("is required")),
 		validation.Field(&ths.Service, validation.Required.Error("is required")),
 	)
 }
