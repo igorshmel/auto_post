@@ -74,6 +74,7 @@ func (ths CreateRecordUseCase) Execute(ctx context.Context, req *dto.CreateRecor
 		}
 
 		log.Debug("create midjorney record")
+		break
 	default:
 		createRecordDBO := mapping.CreateRecordDDOtoDBO(resCreateRecordDDO)
 		log.Info("DBO: %v", createRecordDBO)

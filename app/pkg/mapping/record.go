@@ -85,7 +85,6 @@ func RecordMidDBOtoModel(dbo *dbo.RecordMidDBO) *models.Midjorney {
 		Status:      dbo.Status,
 		Hash:        dbo.Hash,
 		Description: dbo.Description,
-		BaseModel:   base,
 	}
 }
 

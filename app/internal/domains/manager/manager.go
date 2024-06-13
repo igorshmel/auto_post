@@ -46,23 +46,30 @@ func (ths *Manager) newRecord() {
 
 func (ths *Manager) readRecord() *ddo.CreateRecordResponseDDO {
 	return &ddo.CreateRecordResponseDDO{
-		UUID:      ths.UUID,
-		URL:       ths.URL,
-		AuthURL:   ths.AuthURL,
-		Service:   ths.Service,
-		Status:    status.RecordStatusEnum(ths.Status),
-		Hash:      ths.Hash,
-		UpdatedAt: ths.updatedAt,
-		CreatedAt: ths.createdAt,
+		UUID:        ths.UUID,
+		URL:         ths.URL,
+		AuthURL:     ths.AuthURL,
+		ImgURL:      ths.ImgURL,
+		Service:     ths.Service,
+		Status:      status.RecordStatusEnum(ths.Status),
+		Hash:        ths.Hash,
+		Description: ths.Description,
+		UpdatedAt:   ths.updatedAt,
+		CreatedAt:   ths.createdAt,
 	}
 }
 
 // CreateRecord --
 func (ths *Manager) CreateRecord(ddo *ddo.CreateRecordRequestDDO) *ddo.CreateRecordResponseDDO {
 	activeStatus := status.RecordActiveStatus
+	hashStr := ddo.URL + ddo.AuthURL
+
+	if ddo.Service == "midjorney" {
+		hashStr = ddo.ImgURL + ddo.Description
+	}
 
 	h := sha256.New()
-	h.Write([]byte(ddo.URL + ddo.AuthURL))
+	h.Write([]byte(hashStr))
 	hashString := base64.StdEncoding.EncodeToString(h.Sum(nil))
 
 	ths.newRecord()
