@@ -78,13 +78,12 @@ func (ths VKWallPostUseCase) Execute(ctx context.Context) error {
 	responseGetWallUploadServer := structs.VkGetWallUploadServer{}
 	_, err = lib.Request("v", getWallUploadServerDDO.MethodName, getWallUploadServerDDO.Params, &responseGetWallUploadServer)
 	if err != nil {
-		return extErr(errs.UnknownError,
-			msg("getWallUploadServer failed with error: %s", err.Error()), log)
+		return extErr(errs.UnknownError, msg("getWallUploadServer failed with error: %s", err.Error()), log)
 	}
 
 	// Поход в домен - получение пути до файла
-	vkMachineDDO := mapping.RecordDbOtoVkMachineDDO(&recordDBO)
-	path := ths.vkMachineDomain.GetPath(vkMachineDDO)
+	ddoVkMachine := mapping.RecordDbOtoVkMachineDDO(&recordDBO)
+	path := ths.vkMachineDomain.GetPath(ddoVkMachine)
 
 	// Подготовительный этап в формировании загрузки на сайт
 	uploadPhotoWallResponse, err := lib.PhotoWall(responseGetWallUploadServer.Response.UploadURL, path)
@@ -118,7 +117,7 @@ func (ths VKWallPostUseCase) Execute(ctx context.Context) error {
 	}
 	if len(responseSaveWallPhoto.Response) <= 0 {
 		return extErr(errs.UnknownError,
-			msg("method saveWallPhoto failed: Response index = 0; with error %s", err.Error()), log)
+			msg("method saveWallPhoto failed: Response index = 0; with error %w", err), log)
 	}
 
 	// Поход в домен - публикация поста на стене группы

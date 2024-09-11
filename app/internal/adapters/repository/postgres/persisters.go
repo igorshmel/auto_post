@@ -74,3 +74,44 @@ func (ths *SQLStore) SetArtPublishCount(ctx context.Context, dbo *dbo.PublishCou
 	}
 	return nil
 }
+
+// SaveNewYoutubeItems сохраняет массив данных о видеороликах в базу данных.
+func (ths *SQLStore) SaveNewYoutubeItems(ctx context.Context, dbo *dbo.SaveNewYoutubeItemsDBO) error {
+	if ths == nil || ths.db == nil {
+		return errors.New(errs.MsgEmptyDbPointer)
+	}
+	if dbo == nil {
+		return errors.New(errs.MsgEmptyInputData)
+	}
+
+	model := mapping.YoutubeSaveNewYoutubeItemsDBOtoModel(dbo)
+	// Сохранение всех записей
+	if err := ths.db.Table(model.TableName()).
+		Create(&model).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// IsVideoIDExists проверяет, существует ли запись с заданным VideoId в базе данных.
+func (ths *SQLStore) IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error) {
+	if ths == nil || ths.db == nil {
+		return false, errors.New(errs.MsgEmptyDbPointer)
+	}
+	if dbo == nil {
+		return false, errors.New(errs.MsgEmptyInputData)
+	}
+
+	model := mapping.ConvertIsVideoExistsDBOtoModel(dbo)
+	var count int64
+	err := ths.db.Table(model.TableName()).
+		Where("video_id = ?", dbo.VideoId).
+		Count(&count).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

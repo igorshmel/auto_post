@@ -1,4 +1,4 @@
-package structs
+package entitys
 
 import "time"
 

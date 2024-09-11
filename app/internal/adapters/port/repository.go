@@ -11,6 +11,7 @@ import (
 type Extractor interface {
 	GetByActiveStatus(*dbo.RecordDBO) error
 	GetArtPublishCountByDate(ctx context.Context, counterDBO *dbo.PublishCounterDBO) (uint64, error)
+	IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error)
 }
 
 // Persister - объект для сохранения данных в БД
@@ -19,5 +20,6 @@ type Persister interface {
 	CreateRecord(*dbo.RecordDBO) error
 	CreateMidRecord(*dbo.RecordMidDBO) error
 	SetArtPublishCount(ctx context.Context, countDBO *dbo.PublishCounterDBO) error
+	SaveNewYoutubeItems(ctx context.Context, dbo *dbo.SaveNewYoutubeItemsDBO) error
 	UnitOfWork(func(Persister) error) (err error)
 }

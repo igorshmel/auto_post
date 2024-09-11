@@ -76,5 +76,6 @@ func migrateData(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&models.Manager{},
 		&models.PublishCounter{},
+		&models.YoutubeItemsModel{},
 	)
 }

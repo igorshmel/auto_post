@@ -37,6 +37,12 @@ type VKConfig struct {
 	VkAlbumID   string `mapstructure:"vk_album_id" validate:"required"`
 }
 
+// YouTubeConfig - настройки api социальной сети Youtube
+type YouTubeConfig struct {
+	YouTubeToken      string `mapstructure:"youtube_token" validate:"required"`
+	YouTubePlayListID string `mapstructure:"youtube_playlist_id" validate:"required"`
+}
+
 // AppConfig - общие настройки приложения
 type AppConfig struct {
 	Port string `mapstructure:"port" validate:"required"`
@@ -126,6 +132,9 @@ type Config struct {
 
 	// Настройки VkConfig
 	VkConfig VKConfig `mapstructure:"vk_config"`
+
+	// Настройки YouTubeConfig
+	YouTubeConfig YouTubeConfig `mapstructure:"youtube_config"`
 
 	// Настройки загрузчика
 	DownloadMachine DownloadMachine `mapstructure:"download_machine"`

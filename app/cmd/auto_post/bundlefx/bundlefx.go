@@ -15,6 +15,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/middleware"
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/repo"
 	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/routes"
+	"github.com/igorshmel/lic_auto_post/app/cmd/auto_post/youtube"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
@@ -34,6 +35,7 @@ var Module = fx.Options(
 	cron.Module,
 	domains.ManagerDomainModule,
 	domains.VkMachineDomainModule,
+	youtube.Module,
 
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),
@@ -98,6 +100,7 @@ func setGinMiddlewares(router *gin.Engine) {
 func setCron(
 	log logger.Logger,
 	cron *cron.Runner,
+	cfg config.Config,
 	bellEvent *bell.Events,
 ) {
 	task := func(in string, job gocron.Job) {
@@ -114,7 +117,26 @@ func setCron(
 	}
 
 	// Конфигурируем время и частоту выполнения задачи
-	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(task, "foo"); err != nil {
+	if _, err := cron.Cron("* * * */1 *").DoWithJobDetails(task, "foo"); err != nil {
+		log.Error("unable to set the task: %s", err)
+		return
+	}
+
+	taskGetPlayListItems := func(in string, job gocron.Job) {
+		fmt.Printf("this job's last run: %s this job's next run: %s\n", job.LastRun(), job.NextRun())
+		fmt.Printf("in argument is %s\n", in)
+
+		// отправка события vk_wall_upload в домен VkMachineDomain
+		if err := bellEvent.Ring(
+			constants.YouTubeGetPlayListEventName, deo.GetPlayListEvent{PlayListID: cfg.YouTubeConfig.YouTubePlayListID}); err != nil {
+			log.Error("unable send event YouTubeGetPlayList with error: %s", err.Error())
+		}
+
+		log.Debug("sendEvent YouTubeGetPlayList success!")
+	}
+
+	// Конфигурируем время и частоту выполнения задачи
+	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(taskGetPlayListItems, "foo"); err != nil {
 		log.Error("unable to set the task: %s", err)
 		return
 	}
