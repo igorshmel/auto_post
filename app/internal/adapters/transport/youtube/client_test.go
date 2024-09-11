@@ -14,7 +14,7 @@ func TestYouTubeClient_GetPlayListItems(t *testing.T) {
 		playListID string
 	}
 
-	client, err := NewYouTubeClient("AIzaSyCIuulOtq5ZebCqhA_ElCuQvIM01shbApw")
+	client, err := NewYouTubeClient("")
 	if err != nil {
 		return
 	}
@@ -31,7 +31,7 @@ func TestYouTubeClient_GetPlayListItems(t *testing.T) {
 			client: client,
 		},
 		args: args{
-			playListID: "PLgicPnEfofJpsLS7wnv7Cs7mC7jPlHSbj",
+			playListID: "",
 		},
 		want: &youtube.PlaylistItemListResponse{
 			Items: []*youtube.PlaylistItem{
