@@ -6,8 +6,11 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
+	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars/types"
+	"gorm.io/gorm"
 )
 
 // GetByActiveStatus --
@@ -59,4 +62,46 @@ func (ths *SQLStore) GetArtPublishCountByDate(ctx context.Context, publishCounte
 	}
 
 	return count, nil
+}
+
+// IsVideoIDExists проверяет, существует ли запись с заданным VideoId в базе данных.
+func (ths *SQLStore) IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error) {
+	if ths == nil || ths.db == nil {
+		return false, errors.New(errs.MsgEmptyDbPointer)
+	}
+	if dbo == nil {
+		return false, errors.New(errs.MsgEmptyInputData)
+	}
+
+	model := mapping.ConvertIsVideoExistsDBOtoModel(dbo)
+	var count int64
+	err := ths.db.Table(model.TableName()).
+		Where("video_id = ?", dbo.VideoId).
+		Count(&count).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+// GetYoutubeNextCursor - возвращает курсор для списка видеороликов в плейлисте
+func (ths *SQLStore) GetYoutubeNextCursor(ctx context.Context) (*dbo.YoutubeNextCursorDBO, error) {
+	if ths == nil || ths.db == nil {
+		return nil, errors.New(errs.MsgEmptyDbPointer)
+	}
+
+	var res dbo.YoutubeNextCursorDBO
+
+	err := ths.db.WithContext(ctx).Table(constants.YoutubeNextCursorTableName).First(&res).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &res, nil
+		}
+		return nil, err
+	}
+
+	return &res, nil
 }

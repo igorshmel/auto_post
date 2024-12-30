@@ -75,8 +75,32 @@ func (ths *SQLStore) SetArtPublishCount(ctx context.Context, dbo *dbo.PublishCou
 	return nil
 }
 
-// SaveNewYoutubeItems сохраняет массив данных о видеороликах в базу данных.
-func (ths *SQLStore) SaveNewYoutubeItems(ctx context.Context, dbo *dbo.SaveNewYoutubeItemsDBO) error {
+// SaveNewYoutubeItemsBatch сохраняет массив данных о видеороликах в базу данных.
+func (ths *SQLStore) SaveNewYoutubeItemsBatch(ctx context.Context, items []dbo.SaveNewYoutubeItemsDBO) error {
+	if ths == nil || ths.db == nil {
+		return errors.New(errs.MsgEmptyDbPointer)
+	}
+	if len(items) == 0 {
+		return errors.New(errs.MsgEmptyInputData)
+	}
+
+	// Преобразование DBO объектов в модельные объекты
+	dbModels := make([]models.YoutubeItemsModel, len(items))
+	for i, item := range items {
+		dbModels[i] = *mapping.YoutubeSaveNewYoutubeItemsDBOtoModel(&item)
+	}
+
+	// Сохранение всех записей
+	if err := ths.db.Table(dbModels[0].TableName()).
+		Create(&dbModels).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SaveYoutubeNextCursor сохраняет next курсор в базу данных.
+func (ths *SQLStore) SaveYoutubeNextCursor(ctx context.Context, dbo *dbo.YoutubeNextCursorDBO) error {
 	if ths == nil || ths.db == nil {
 		return errors.New(errs.MsgEmptyDbPointer)
 	}
@@ -84,8 +108,7 @@ func (ths *SQLStore) SaveNewYoutubeItems(ctx context.Context, dbo *dbo.SaveNewYo
 		return errors.New(errs.MsgEmptyInputData)
 	}
 
-	model := mapping.YoutubeSaveNewYoutubeItemsDBOtoModel(dbo)
-	// Сохранение всех записей
+	model := mapping.YoutubeNextCursorDBOtoModel(dbo)
 	if err := ths.db.Table(model.TableName()).
 		Create(&model).Error; err != nil {
 		return err
@@ -94,24 +117,20 @@ func (ths *SQLStore) SaveNewYoutubeItems(ctx context.Context, dbo *dbo.SaveNewYo
 	return nil
 }
 
-// IsVideoIDExists проверяет, существует ли запись с заданным VideoId в базе данных.
-func (ths *SQLStore) IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error) {
+// UpdateYoutubeNextCursor обновляет next курсор в базу данных.
+func (ths *SQLStore) UpdateYoutubeNextCursor(ctx context.Context, dbo *dbo.YoutubeNextCursorDBO) error {
 	if ths == nil || ths.db == nil {
-		return false, errors.New(errs.MsgEmptyDbPointer)
+		return errors.New(errs.MsgEmptyDbPointer)
 	}
 	if dbo == nil {
-		return false, errors.New(errs.MsgEmptyInputData)
+		return errors.New(errs.MsgEmptyInputData)
 	}
 
-	model := mapping.ConvertIsVideoExistsDBOtoModel(dbo)
-	var count int64
-	err := ths.db.Table(model.TableName()).
-		Where("video_id = ?", dbo.VideoId).
-		Count(&count).Error
-
-	if err != nil {
-		return false, err
+	model := mapping.YoutubeNextCursorDBOtoModel(dbo)
+	if err := ths.db.Table(model.TableName()).
+		UpdateColumns(&model).Error; err != nil {
+		return err
 	}
 
-	return count > 0, nil
+	return nil
 }

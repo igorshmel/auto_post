@@ -5,6 +5,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/repository/models/basis"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
+	"github.com/igorshmel/lic_auto_post/app/pkg/ddo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
@@ -44,6 +45,13 @@ func ConvertVideosInfoDTOtoDBO(dto dto.VideoInfo) dbo.IsVideoExistsDBO {
 	}
 }
 
+// ConvertDDOItemToDBO --
+func ConvertDDOItemToDBO(ddo ddo.ResGetItems) dbo.IsVideoExistsDBO {
+	return dbo.IsVideoExistsDBO{
+		VideoId: ddo.VideoId,
+	}
+}
+
 // ConvertIsVideoExistsDBOtoModel --
 func ConvertIsVideoExistsDBOtoModel(dbo *dbo.IsVideoExistsDBO) *models.YoutubeItemsModel {
 	return &models.YoutubeItemsModel{
@@ -73,5 +81,16 @@ func YoutubeSaveNewYoutubeItemsDtOtoDBO(dto *dto.VideoInfo) *dbo.SaveNewYoutubeI
 		VideoId:   dto.VideoId,
 		Status:    status.RecordActiveStatus,
 		CreatedAt: time.Now(),
+	}
+}
+
+// YoutubeNextCursorDBOtoModel --
+func YoutubeNextCursorDBOtoModel(dbo *dbo.YoutubeNextCursorDBO) *models.YoutubeNextCursorModel {
+	base := basis.BaseModel{}
+	base.CreatedAt = dbo.CreatedAt
+	base.UpdatedAt = dbo.UpdatedAt
+	return &models.YoutubeNextCursorModel{
+		NextPageToken: dbo.NextPageToken,
+		BaseModel:     base,
 	}
 }

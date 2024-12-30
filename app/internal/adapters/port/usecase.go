@@ -40,3 +40,8 @@ type GetPlayListUseCase interface {
 type SaveNewYoutubeItemsUseCase interface {
 	Execute(context.Context, logger.Logger, *dto.SaveNewYoutubeItemsReqDTO) error
 }
+
+// GetYoutubeNextCursorUseCase --
+type GetYoutubeNextCursorUseCase interface {
+	Execute(context.Context, logger.Logger) error
+}

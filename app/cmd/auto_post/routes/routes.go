@@ -7,6 +7,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/transport/youtube"
 	manager "github.com/igorshmel/lic_auto_post/app/internal/domains/manager"
 	vkMachine "github.com/igorshmel/lic_auto_post/app/internal/domains/vk_machine"
+	ytmachine "github.com/igorshmel/lic_auto_post/app/internal/domains/youtube_machine"
 	"github.com/igorshmel/lic_auto_post/app/internal/usecase/api"
 	"github.com/igorshmel/lic_auto_post/app/internal/usecase/repository_usecase"
 	"github.com/igorshmel/lic_auto_post/app/internal/usecase/youtube_usecase"
@@ -29,6 +30,7 @@ func registerRoutes(
 	managerDomain *manager.Domain,
 	vkMachineDomain *vkMachine.Domain,
 	youtubeClient *youtube.YouTubeClient,
+	youtubeDomain *ytmachine.Domain,
 ) {
 	apiGroup := g.Group("/api")
 	v1 := apiGroup.Group("/v1")
@@ -39,8 +41,10 @@ func registerRoutes(
 	downloadImageUseCase := api.NewDownloadImageUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), managerDomain.GetManagerPort())
 	vkWallUploadUseCase := api.NewVKWallPostUseCase(log, bellEvent, repo.GetPersister(), repo.GetExtractor(), vkMachineDomain.GetVkMachinePorts())
 
-	getPlayListUseCase := youtube_usecase.NewGetPlayListUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), youtubeClient)
-	saveNewYoutubeItemsUseCase := repository_usecase.NewSaveNewYoutubeItemsUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor())
+	getPlayListUseCase := youtube_usecase.NewGetPlayListUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), youtubeClient, youtubeDomain.GetYoutubeMachinePorts())
+	getYouTubeNextCursorUseCase := youtube_usecase.NewGetNextCursorUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), youtubeClient, youtubeDomain.GetYoutubeMachinePorts())
+
+	saveNewYoutubeItemsUseCase := repository_usecase.NewSaveNewYoutubeItemsUseCase(cfg, log, bellEvent, repo.GetPersister(), repo.GetExtractor(), youtubeDomain.GetYoutubeMachinePorts())
 
 	// Создание обработчиков запросов
 	createRecordEndpoint := rest.NewCreateRecordEndpoint(createRecordUseCase, log)
@@ -72,7 +76,20 @@ func registerRoutes(
 		}
 	})
 
-	// прослушивание события vk_wall_upload
+	//////////////////////////////////////////////////
+	// YOUTUBE
+	//////////////////////////////////////////////////
+
+	// youtube_get_next_cursor - событие
+	bellEvent.Listen(constants.YouTubeGetNextCursorEventName, func(msg bell.Message) {
+		getYouTubeNextCursorEvent := msg.(deo.GetNextCursorEvent)
+		if err := getYouTubeNextCursorUseCase.Execute(nil, log); err != nil {
+			log.Error("failed execute GetYouTubeNextCursorUsecase with error: %s ", err.Error())
+		}
+		log.Info("YouTubeGetNextCursorEvent: %v", getYouTubeNextCursorEvent)
+	})
+
+	// youtube_get_playlist - событие
 	bellEvent.Listen(constants.YouTubeGetPlayListEventName, func(msg bell.Message) {
 		getPlayListEvent := msg.(deo.GetPlayListEvent)
 		log.Info("Event GetPlayList with req: %w", getPlayListEvent)
@@ -83,7 +100,7 @@ func registerRoutes(
 		}
 	})
 
-	// add listener on event
+	// youtube_get_playlist_done
 	bellEvent.Listen(constants.YouTubeGetPlayListDoneEventName, func(msg bell.Message) {
 		saveNewYoutubeItemsEvent := msg.(deo.SaveNewYoutubeItemsEvent)
 		if err := saveNewYoutubeItemsUseCase.Execute(nil, log, &dto.SaveNewYoutubeItemsReqDTO{
@@ -94,6 +111,7 @@ func registerRoutes(
 		}
 		log.Info("YouTubeGetPlayListDoneEvent: %v", saveNewYoutubeItemsEvent)
 	})
+
 }
 
 // Module ..

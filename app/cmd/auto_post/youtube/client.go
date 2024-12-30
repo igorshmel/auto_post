@@ -15,5 +15,5 @@ func newYouTubeClient(log logger.Logger, cfg config.Config) (*youtube.YouTubeCli
 	return rep, err
 }
 
-// Module ..
-var Module = fx.Options(fx.Provide(newYouTubeClient))
+// ClientModule ..
+var ClientModule = fx.Options(fx.Provide(newYouTubeClient))

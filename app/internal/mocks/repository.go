@@ -6,50 +6,37 @@ package mocks
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	port "github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	dbo "github.com/igorshmel/lic_auto_post/app/pkg/dbo"
-	reflect "reflect"
 )
 
-// MockExtractor is a mock of Extractor interface
+// MockExtractor is a mock of Extractor interface.
 type MockExtractor struct {
 	ctrl     *gomock.Controller
 	recorder *MockExtractorMockRecorder
 }
 
-// MockExtractorMockRecorder is the mock recorder for MockExtractor
+// MockExtractorMockRecorder is the mock recorder for MockExtractor.
 type MockExtractorMockRecorder struct {
 	mock *MockExtractor
 }
 
-// NewMockExtractor creates a new mock instance
+// NewMockExtractor creates a new mock instance.
 func NewMockExtractor(ctrl *gomock.Controller) *MockExtractor {
 	mock := &MockExtractor{ctrl: ctrl}
 	mock.recorder = &MockExtractorMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockExtractor) EXPECT() *MockExtractorMockRecorder {
 	return m.recorder
 }
 
-// GetByActiveStatus mocks base method
-func (m *MockExtractor) GetByActiveStatus(arg0 *dbo.RecordDBO) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByActiveStatus", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// GetByActiveStatus indicates an expected call of GetByActiveStatus
-func (mr *MockExtractorMockRecorder) GetByActiveStatus(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByActiveStatus", reflect.TypeOf((*MockExtractor)(nil).GetByActiveStatus), arg0)
-}
-
-// GetArtPublishCountByDate mocks base method
+// GetArtPublishCountByDate mocks base method.
 func (m *MockExtractor) GetArtPublishCountByDate(ctx context.Context, counterDBO *dbo.PublishCounterDBO) (uint64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetArtPublishCountByDate", ctx, counterDBO)
@@ -58,50 +45,94 @@ func (m *MockExtractor) GetArtPublishCountByDate(ctx context.Context, counterDBO
 	return ret0, ret1
 }
 
-// GetArtPublishCountByDate indicates an expected call of GetArtPublishCountByDate
+// GetArtPublishCountByDate indicates an expected call of GetArtPublishCountByDate.
 func (mr *MockExtractorMockRecorder) GetArtPublishCountByDate(ctx, counterDBO interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArtPublishCountByDate", reflect.TypeOf((*MockExtractor)(nil).GetArtPublishCountByDate), ctx, counterDBO)
 }
 
-// MockPersister is a mock of Persister interface
+// GetByActiveStatus mocks base method.
+func (m *MockExtractor) GetByActiveStatus(arg0 *dbo.RecordDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByActiveStatus", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetByActiveStatus indicates an expected call of GetByActiveStatus.
+func (mr *MockExtractorMockRecorder) GetByActiveStatus(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByActiveStatus", reflect.TypeOf((*MockExtractor)(nil).GetByActiveStatus), arg0)
+}
+
+// GetYoutubeNextCursor mocks base method.
+func (m *MockExtractor) GetYoutubeNextCursor(ctx context.Context) (*dbo.YoutubeNextCursorDBO, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetYoutubeNextCursor", ctx)
+	ret0, _ := ret[0].(*dbo.YoutubeNextCursorDBO)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetYoutubeNextCursor indicates an expected call of GetYoutubeNextCursor.
+func (mr *MockExtractorMockRecorder) GetYoutubeNextCursor(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetYoutubeNextCursor", reflect.TypeOf((*MockExtractor)(nil).GetYoutubeNextCursor), ctx)
+}
+
+// IsVideoIDExists mocks base method.
+func (m *MockExtractor) IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsVideoIDExists", ctx, dbo)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// IsVideoIDExists indicates an expected call of IsVideoIDExists.
+func (mr *MockExtractorMockRecorder) IsVideoIDExists(ctx, dbo interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsVideoIDExists", reflect.TypeOf((*MockExtractor)(nil).IsVideoIDExists), ctx, dbo)
+}
+
+// MockPersister is a mock of Persister interface.
 type MockPersister struct {
 	ctrl     *gomock.Controller
 	recorder *MockPersisterMockRecorder
 }
 
-// MockPersisterMockRecorder is the mock recorder for MockPersister
+// MockPersisterMockRecorder is the mock recorder for MockPersister.
 type MockPersisterMockRecorder struct {
 	mock *MockPersister
 }
 
-// NewMockPersister creates a new mock instance
+// NewMockPersister creates a new mock instance.
 func NewMockPersister(ctrl *gomock.Controller) *MockPersister {
 	mock := &MockPersister{ctrl: ctrl}
 	mock.recorder = &MockPersisterMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockPersister) EXPECT() *MockPersisterMockRecorder {
 	return m.recorder
 }
 
-// UpdateRecordStatus mocks base method
-func (m *MockPersister) UpdateRecordStatus(arg0 *dbo.RecordDBO) error {
+// CreateMidRecord mocks base method.
+func (m *MockPersister) CreateMidRecord(arg0 *dbo.RecordMidDBO) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateRecordStatus", arg0)
+	ret := m.ctrl.Call(m, "CreateMidRecord", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// UpdateRecordStatus indicates an expected call of UpdateRecordStatus
-func (mr *MockPersisterMockRecorder) UpdateRecordStatus(arg0 interface{}) *gomock.Call {
+// CreateMidRecord indicates an expected call of CreateMidRecord.
+func (mr *MockPersisterMockRecorder) CreateMidRecord(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRecordStatus", reflect.TypeOf((*MockPersister)(nil).UpdateRecordStatus), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMidRecord", reflect.TypeOf((*MockPersister)(nil).CreateMidRecord), arg0)
 }
 
-// CreateRecord mocks base method
+// CreateRecord mocks base method.
 func (m *MockPersister) CreateRecord(arg0 *dbo.RecordDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateRecord", arg0)
@@ -109,13 +140,41 @@ func (m *MockPersister) CreateRecord(arg0 *dbo.RecordDBO) error {
 	return ret0
 }
 
-// CreateRecord indicates an expected call of CreateRecord
+// CreateRecord indicates an expected call of CreateRecord.
 func (mr *MockPersisterMockRecorder) CreateRecord(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRecord", reflect.TypeOf((*MockPersister)(nil).CreateRecord), arg0)
 }
 
-// SetArtPublishCount mocks base method
+// SaveNewYoutubeItemsBatch mocks base method.
+func (m *MockPersister) SaveNewYoutubeItemsBatch(ctx context.Context, dbo []dbo.SaveNewYoutubeItemsDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveNewYoutubeItemsBatch", ctx, dbo)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveNewYoutubeItemsBatch indicates an expected call of SaveNewYoutubeItemsBatch.
+func (mr *MockPersisterMockRecorder) SaveNewYoutubeItemsBatch(ctx, dbo interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveNewYoutubeItemsBatch", reflect.TypeOf((*MockPersister)(nil).SaveNewYoutubeItemsBatch), ctx, dbo)
+}
+
+// SaveYoutubeNextCursor mocks base method.
+func (m *MockPersister) SaveYoutubeNextCursor(ctx context.Context, dbo *dbo.YoutubeNextCursorDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveYoutubeNextCursor", ctx, dbo)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveYoutubeNextCursor indicates an expected call of SaveYoutubeNextCursor.
+func (mr *MockPersisterMockRecorder) SaveYoutubeNextCursor(ctx, dbo interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveYoutubeNextCursor", reflect.TypeOf((*MockPersister)(nil).SaveYoutubeNextCursor), ctx, dbo)
+}
+
+// SetArtPublishCount mocks base method.
 func (m *MockPersister) SetArtPublishCount(ctx context.Context, countDBO *dbo.PublishCounterDBO) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetArtPublishCount", ctx, countDBO)
@@ -123,13 +182,13 @@ func (m *MockPersister) SetArtPublishCount(ctx context.Context, countDBO *dbo.Pu
 	return ret0
 }
 
-// SetArtPublishCount indicates an expected call of SetArtPublishCount
+// SetArtPublishCount indicates an expected call of SetArtPublishCount.
 func (mr *MockPersisterMockRecorder) SetArtPublishCount(ctx, countDBO interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetArtPublishCount", reflect.TypeOf((*MockPersister)(nil).SetArtPublishCount), ctx, countDBO)
 }
 
-// UnitOfWork mocks base method
+// UnitOfWork mocks base method.
 func (m *MockPersister) UnitOfWork(arg0 func(port.Persister) error) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UnitOfWork", arg0)
@@ -137,8 +196,36 @@ func (m *MockPersister) UnitOfWork(arg0 func(port.Persister) error) error {
 	return ret0
 }
 
-// UnitOfWork indicates an expected call of UnitOfWork
+// UnitOfWork indicates an expected call of UnitOfWork.
 func (mr *MockPersisterMockRecorder) UnitOfWork(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UnitOfWork", reflect.TypeOf((*MockPersister)(nil).UnitOfWork), arg0)
+}
+
+// UpdateRecordStatus mocks base method.
+func (m *MockPersister) UpdateRecordStatus(arg0 *dbo.RecordDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateRecordStatus", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateRecordStatus indicates an expected call of UpdateRecordStatus.
+func (mr *MockPersisterMockRecorder) UpdateRecordStatus(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRecordStatus", reflect.TypeOf((*MockPersister)(nil).UpdateRecordStatus), arg0)
+}
+
+// UpdateYoutubeNextCursor mocks base method.
+func (m *MockPersister) UpdateYoutubeNextCursor(ctx context.Context, dbo *dbo.YoutubeNextCursorDBO) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateYoutubeNextCursor", ctx, dbo)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateYoutubeNextCursor indicates an expected call of UpdateYoutubeNextCursor.
+func (mr *MockPersisterMockRecorder) UpdateYoutubeNextCursor(ctx, dbo interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateYoutubeNextCursor", reflect.TypeOf((*MockPersister)(nil).UpdateYoutubeNextCursor), ctx, dbo)
 }

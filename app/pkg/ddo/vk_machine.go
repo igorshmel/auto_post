@@ -59,3 +59,9 @@ type ResPhotosSave struct {
 	Params     map[string]string
 	MethodName string
 }
+
+// ResGetItems --
+type ResGetItems struct {
+	VideoId string
+	Title   string
+}

@@ -33,9 +33,10 @@ var Module = fx.Options(
 	repo.Module,
 	events.Module,
 	cron.Module,
+	youtube.ClientModule,
 	domains.ManagerDomainModule,
 	domains.VkMachineDomainModule,
-	youtube.Module,
+	domains.YoutubeMachineDomainModule,
 
 	fx.Invoke(setGinMiddlewares),
 	fx.Invoke(setGinLogger),
@@ -122,21 +123,20 @@ func setCron(
 		return
 	}
 
-	taskGetPlayListItems := func(in string, job gocron.Job) {
+	taskGetYoutubeNextCursor := func(in string, job gocron.Job) {
 		fmt.Printf("this job's last run: %s this job's next run: %s\n", job.LastRun(), job.NextRun())
 		fmt.Printf("in argument is %s\n", in)
 
-		// отправка события vk_wall_upload в домен VkMachineDomain
+		// отправка события для начала процесса чтения и сохранения записей плейлиста.
 		if err := bellEvent.Ring(
-			constants.YouTubeGetPlayListEventName, deo.GetPlayListEvent{PlayListID: cfg.YouTubeConfig.YouTubePlayListID}); err != nil {
-			log.Error("unable send event YouTubeGetPlayList with error: %s", err.Error())
+			constants.YouTubeGetNextCursorEventName, deo.GetNextCursorEvent{}); err != nil {
+			log.Error("unable send event YouTubeGetNextCursor with error: %s", err.Error())
 		}
-
-		log.Debug("sendEvent YouTubeGetPlayList success!")
+		log.Debug("sendEvent YouTubeGetNextCursor success!")
 	}
 
 	// Конфигурируем время и частоту выполнения задачи
-	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(taskGetPlayListItems, "foo"); err != nil {
+	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(taskGetYoutubeNextCursor, "foo"); err != nil {
 		log.Error("unable to set the task: %s", err)
 		return
 	}

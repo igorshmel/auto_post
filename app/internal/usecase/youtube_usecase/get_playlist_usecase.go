@@ -2,14 +2,12 @@ package youtube_usecase
 
 import (
 	"context"
-	"fmt"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	transport "github.com/igorshmel/lic_auto_post/app/internal/adapters/transport/youtube"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
 	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
-	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"github.com/nuttech/bell/v2"
 	"google.golang.org/api/youtube/v3"
@@ -24,6 +22,7 @@ type GetPlayListUseCase struct {
 	persister     port.Persister
 	extractor     port.Extractor
 	youtubeClient *transport.YouTubeClient
+	youtubeDomain port.YoutubeMachineDomain
 }
 
 // NewGetPlayListUseCase --
@@ -34,6 +33,7 @@ func NewGetPlayListUseCase(
 	persister port.Persister,
 	extractor port.Extractor,
 	youtubeClient *transport.YouTubeClient,
+	youtubeDomain port.YoutubeMachineDomain,
 ) port.GetPlayListUseCase {
 	return GetPlayListUseCase{
 		cfg:           cfg,
@@ -42,20 +42,18 @@ func NewGetPlayListUseCase(
 		persister:     persister,
 		extractor:     extractor,
 		youtubeClient: youtubeClient,
+		youtubeDomain: youtubeDomain,
 	}
 }
 
 // Execute _
 func (ths GetPlayListUseCase) Execute(ctx context.Context, req *dto.GetPlayListReqDTO) error {
-	var videosInfo []dto.VideoInfo
+	//var videosInfo []dto.VideoInfo
 	var nextPageToken, prevPageToken string
 	allItems := youtube.PlaylistItemListResponse{}
 
 	log := ths.log.WithMethod("usecase GetPlayList")
 	log.Info("Try GetPlayList with req: %v", req)
-	// -- Бизнес логика --
-	// ---------------------------------------------------------------------------------------------------------------------------
-
 	// -- Инфраструктурная логика --
 	// ---------------------------------------------------------------------------------------------------------------------------
 	for {
@@ -75,10 +73,13 @@ func (ths GetPlayListUseCase) Execute(ctx context.Context, req *dto.GetPlayListR
 	}
 	allItems.PrevPageToken = prevPageToken
 
+	// -- Бизнес логика --
+	// ---------------------------------------------------------------------------------------------------------------------------
 	for _, item := range allItems.Items {
-		fmt.Printf("Title: %s	| ", item.Snippet.Title)
-		fmt.Printf("VideoID: %s \n", item.Snippet.ResourceId.VideoId)
-		videosInfo = append(videosInfo, dto.VideoInfo{Title: item.Snippet.Title, VideoId: item.Snippet.ResourceId.VideoId})
+		//fmt.Printf("Title: %s	| ", item.Snippet.Title)
+		//fmt.Printf("VideoID: %s \n", item.Snippet.ResourceId.VideoId)
+		ths.youtubeDomain.KeepItems(item.Snippet.Title, item.Snippet.ResourceId.VideoId)
+		//videosInfo = append(videosInfo, dto.VideoInfo{Title: item.Snippet.Title, VideoId: item.Snippet.ResourceId.VideoId})
 	}
 
 	// -- Периферия --
@@ -88,7 +89,7 @@ func (ths GetPlayListUseCase) Execute(ctx context.Context, req *dto.GetPlayListR
 	if err := ths.bell.Ring(
 		constants.YouTubeGetPlayListDoneEventName,
 		deo.SaveNewYoutubeItemsEvent{
-			VideosInfo:           mapping.ConvertVideosInfoDTOtoDEO(videosInfo),
+			//VideosInfo:           mapping.ConvertVideosInfoDTOtoDEO(videosInfo),
 			NextCursorPagination: nextPageToken,
 		}); err != nil {
 

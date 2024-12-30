@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
 	"github.com/igorshmel/lic_auto_post/app/pkg/lib"
@@ -15,11 +16,12 @@ import (
 
 // SaveNewYoutubeItemsUseCase --
 type SaveNewYoutubeItemsUseCase struct {
-	cfg       config.Config
-	log       logger.Logger
-	bell      *bell.Events
-	persister port.Persister
-	extractor port.Extractor
+	cfg           config.Config
+	log           logger.Logger
+	bell          *bell.Events
+	persister     port.Persister
+	extractor     port.Extractor
+	youtubeDomain port.YoutubeMachineDomain
 }
 
 // NewSaveNewYoutubeItemsUseCase --
@@ -29,13 +31,15 @@ func NewSaveNewYoutubeItemsUseCase(
 	events *bell.Events,
 	persister port.Persister,
 	extractor port.Extractor,
+	youtubeDomain port.YoutubeMachineDomain,
 ) port.SaveNewYoutubeItemsUseCase {
 	return SaveNewYoutubeItemsUseCase{
-		cfg:       cfg,
-		log:       log,
-		bell:      events,
-		persister: persister,
-		extractor: extractor,
+		cfg:           cfg,
+		log:           log,
+		bell:          events,
+		persister:     persister,
+		extractor:     extractor,
+		youtubeDomain: youtubeDomain,
 	}
 }
 
@@ -44,19 +48,51 @@ func (ths SaveNewYoutubeItemsUseCase) Execute(ctx context.Context, log logger.Lo
 	msg := fmt.Sprintf
 	log.Info("REQ: SaveNewYoutubeItems: %v", req)
 
-	for _, videoInfo := range req.VideosInfo {
-		isVideoExistsDBO := mapping.ConvertVideosInfoDTOtoDBO(videoInfo)
-		isVideoIDExists, err := ths.extractor.IsVideoIDExists(ctx, &isVideoExistsDBO)
+	// Получаем список элементов
+	items := ths.youtubeDomain.GetItems()
+	log.Debug("Retrieved %d items from YouTube domain", len(items)) // Уменьшено шумное логирование
+
+	newVideos := make([]dto.VideoInfo, 0) // Фильтруем только новые видео
+
+	for _, item := range items {
+		videoDBO := mapping.ConvertDDOItemToDBO(item)
+		videoExists, err := ths.extractor.IsVideoIDExists(ctx, &videoDBO)
 		if err != nil {
-			return lib.ExtErr(errs.UnknownError, msg("failed to get IsVideoIDExists with error: %s", err.Error()), log)
+			return lib.ExtErr(
+				errs.UnknownError,
+				msg("failed to check if video exists (ID: %s): %s", item.VideoId, err.Error()),
+				log,
+			)
 		}
-		if !isVideoIDExists {
-			saveNewYoutubeItemsDBO := mapping.YoutubeSaveNewYoutubeItemsDtOtoDBO(&videoInfo)
-			if err := ths.persister.SaveNewYoutubeItems(ctx, saveNewYoutubeItemsDBO); err != nil {
-				return lib.ExtErr(errs.UnknownError, msg("failed to saveNewYoutubeItems with error: %s", err.Error()), log)
-			}
+
+		// Добавляем только те видео, которых нет в базе данных
+		if !videoExists {
+			newVideos = append(newVideos, dto.VideoInfo{
+				Title:   item.Title,
+				VideoId: item.VideoId,
+			})
 		}
 	}
 
+	if len(newVideos) == 0 {
+		log.Info("No new videos to save")
+		return nil
+	}
+
+	// Маппинг и множественное сохранение
+	videoDBOs := make([]dbo.SaveNewYoutubeItemsDBO, len(newVideos))
+	for i, video := range newVideos {
+		videoDBOs[i] = *mapping.YoutubeSaveNewYoutubeItemsDtOtoDBO(&video)
+	}
+
+	if err := ths.persister.SaveNewYoutubeItemsBatch(ctx, videoDBOs); err != nil {
+		return lib.ExtErr(
+			errs.UnknownError,
+			msg("failed to save new videos batch: %s", err.Error()),
+			log,
+		)
+	}
+
+	log.Info("Successfully saved %d new videos", len(newVideos))
 	return nil
 }

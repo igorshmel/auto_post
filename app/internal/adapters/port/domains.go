@@ -14,8 +14,16 @@ type VkMachineDomain interface {
 	GetPath(*ddo.VKMachine) string
 	SaveWallPhoto(*ddo.ReqSaveWallPhoto) *ddo.ResSaveWallPhoto
 	GetWallUploadServer() *ddo.GetWallUploadServer
-	PostWallPhoto(req *ddo.ReqPostWallPhoto) *ddo.ResPostWallPhoto
+	PostWallPhoto(*ddo.ReqPostWallPhoto) *ddo.ResPostWallPhoto
 	GetUploadServer() *ddo.ResGetUploadServer
-	PhotosSave(req ddo.ReqPhotosSave) *ddo.ResPhotosSave
+	PhotosSave(ddo.ReqPhotosSave) *ddo.ResPhotosSave
 	GetTags() string
+}
+
+// YoutubeMachineDomain interface --
+type YoutubeMachineDomain interface {
+	KeepNextCursor(string)
+	GetNextCursor() string
+	KeepItems(title, videoID string)
+	GetItems() []ddo.ResGetItems
 }
