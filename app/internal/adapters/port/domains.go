@@ -22,8 +22,12 @@ type VkMachineDomain interface {
 
 // YoutubeMachineDomain interface --
 type YoutubeMachineDomain interface {
-	KeepNextCursor(string)
-	GetNextCursor() string
-	KeepItems(title, videoID string)
-	GetItems() []ddo.ResGetItems
+	KeepNextCursor(string, string)
+	KeepRandomItem(string, *ddo.YoutubeItemDDO)
+	GetRandomItem(string) *ddo.YoutubeItemDDO
+	GetNextCursor(string) string
+	KeepItems(string, string, string)
+	GetItems(string) []ddo.ResGetItems
+	ClearItems(string)
+	DeleteState(string)
 }

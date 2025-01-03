@@ -5,6 +5,7 @@ import (
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
+// ExtErr --
 func ExtErr(code string, msg string, log logger.Logger) error {
 	log.Error(msg)
 	return errs.New().SetCode(code).SetMsg(msg).Error()

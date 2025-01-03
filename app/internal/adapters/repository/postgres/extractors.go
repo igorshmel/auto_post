@@ -76,7 +76,7 @@ func (ths *SQLStore) IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExists
 	model := mapping.ConvertIsVideoExistsDBOtoModel(dbo)
 	var count int64
 	err := ths.db.Table(model.TableName()).
-		Where("video_id = ?", dbo.VideoId).
+		Where("video_id = ?", dbo.VideoID).
 		Count(&count).Error
 
 	if err != nil {
@@ -104,4 +104,31 @@ func (ths *SQLStore) GetYoutubeNextCursor(ctx context.Context) (*dbo.YoutubeNext
 	}
 
 	return &res, nil
+}
+
+// GetRandomActiveItem - получает одну случайную запись со статусом Active
+func (ths *SQLStore) GetRandomActiveItem(randomItem *dbo.YoutubeItemDBO) error {
+	if ths == nil || ths.db == nil {
+		return errors.New(errs.MsgEmptyDbPointer)
+	}
+	if randomItem == nil {
+		return errors.New(errs.MsgEmptyInputData)
+	}
+
+	model := models.YoutubeItemsModel{}
+
+	res := ths.db.Model(&model).
+		Where("status = ?", status.RecordActiveStatus).
+		Order("RANDOM()").
+		Limit(1).Find(randomItem)
+
+	if res.Error != nil {
+		return res.Error
+	}
+
+	if res.RowsAffected == 0 {
+		return errors.New(errs.MsgNotFound)
+	}
+
+	return nil
 }

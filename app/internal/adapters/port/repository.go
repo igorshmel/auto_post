@@ -13,6 +13,7 @@ type Extractor interface {
 	GetArtPublishCountByDate(ctx context.Context, counterDBO *dbo.PublishCounterDBO) (uint64, error)
 	IsVideoIDExists(ctx context.Context, dbo *dbo.IsVideoExistsDBO) (bool, error)
 	GetYoutubeNextCursor(ctx context.Context) (*dbo.YoutubeNextCursorDBO, error)
+	GetRandomActiveItem(recordDBO *dbo.YoutubeItemDBO) error
 }
 
 // Persister - объект для сохранения данных в БД

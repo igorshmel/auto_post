@@ -2,12 +2,12 @@ package youtube_usecase
 
 import (
 	"context"
+	"fmt"
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	transport "github.com/igorshmel/lic_auto_post/app/internal/adapters/transport/youtube"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
-	"github.com/igorshmel/lic_auto_post/app/pkg/deo"
-	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"github.com/nuttech/bell/v2"
 	"google.golang.org/api/youtube/v3"
@@ -47,18 +47,23 @@ func NewGetPlayListUseCase(
 }
 
 // Execute _
-func (ths GetPlayListUseCase) Execute(ctx context.Context, req *dto.GetPlayListReqDTO) error {
-	//var videosInfo []dto.VideoInfo
+func (ths GetPlayListUseCase) Execute(ctx context.Context) error {
 	var nextPageToken, prevPageToken string
 	allItems := youtube.PlaylistItemListResponse{}
+	playlistID := ths.cfg.YouTubeConfig.YouTubePlayListID
 
-	log := ths.log.WithMethod("usecase GetPlayList")
-	log.Info("Try GetPlayList with req: %v", req)
-	// -- Инфраструктурная логика --
-	// ---------------------------------------------------------------------------------------------------------------------------
+	requestID, ok := ctx.Value(vars.RequestIDKey).(string)
+	if !ok {
+		return fmt.Errorf("requestID not found in context")
+	}
+
+	log := ths.log.WithMethod(requestID + " | usecase GetPlayList")
+	log.Info("start")
+
+	// ~~~~ Инфраструктурная логика ~~~~
 	for {
 		time.Sleep(100 * time.Microsecond)
-		response, err := ths.youtubeClient.GetPlayListItems(req.PlayListID, nextPageToken)
+		response, err := ths.youtubeClient.GetPlayListItems(playlistID, nextPageToken)
 		if err != nil {
 			return err
 		}
@@ -73,27 +78,16 @@ func (ths GetPlayListUseCase) Execute(ctx context.Context, req *dto.GetPlayListR
 	}
 	allItems.PrevPageToken = prevPageToken
 
-	// -- Бизнес логика --
-	// ---------------------------------------------------------------------------------------------------------------------------
+	// ~~~~  Бизнес логика ~~~~
 	for _, item := range allItems.Items {
-		//fmt.Printf("Title: %s	| ", item.Snippet.Title)
-		//fmt.Printf("VideoID: %s \n", item.Snippet.ResourceId.VideoId)
-		ths.youtubeDomain.KeepItems(item.Snippet.Title, item.Snippet.ResourceId.VideoId)
-		//videosInfo = append(videosInfo, dto.VideoInfo{Title: item.Snippet.Title, VideoId: item.Snippet.ResourceId.VideoId})
+		ths.youtubeDomain.KeepItems(requestID, item.Snippet.Title, item.Snippet.ResourceId.VideoId)
 	}
 
-	// -- Периферия --
-	// ---------------------------------------------------------------------------------------------------------------------------
-
-	// отправка события YouTubeGetPlayListDoneEventName для получения данных по playlist
+	// ~~~~ Периферия ~~~~
+	// отправка события Done_GetPlaylist_Event для получения данных по playlist
 	if err := ths.bell.Ring(
-		constants.YouTubeGetPlayListDoneEventName,
-		deo.SaveNewYoutubeItemsEvent{
-			//VideosInfo:           mapping.ConvertVideosInfoDTOtoDEO(videosInfo),
-			NextCursorPagination: nextPageToken,
-		}); err != nil {
-
-		ths.log.Error("unable send event DownloadImage with error: %s", err.Error())
+		constants.Done_GetPlaylist_Event, ctx); err != nil {
+		ths.log.Error("unable send event Done_GetPlaylist_Event with error: %s", err.Error())
 	}
 	log.Debug("client: response body")
 

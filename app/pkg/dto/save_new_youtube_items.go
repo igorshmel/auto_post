@@ -18,7 +18,7 @@ type SaveNewYoutubeItemsReqDTO struct {
 // VideoInfo --
 type VideoInfo struct {
 	Title   string `json:"title,omitempty"`
-	VideoId string `json:"videoId,omitempty"`
+	VideoID string `json:"videoId,omitempty"`
 }
 
 // Validate validates an input request

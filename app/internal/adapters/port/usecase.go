@@ -3,7 +3,6 @@ package port
 import (
 	"context"
 	"github.com/igorshmel/lic_auto_post/app/pkg/dto"
-	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 )
 
 // CreateRecordUseCase --
@@ -33,15 +32,25 @@ type BasisUseCase interface {
 
 // GetPlayListUseCase --
 type GetPlayListUseCase interface {
-	Execute(context.Context, *dto.GetPlayListReqDTO) error
+	Execute(context.Context) error
 }
 
 // SaveNewYoutubeItemsUseCase --
 type SaveNewYoutubeItemsUseCase interface {
-	Execute(context.Context, logger.Logger, *dto.SaveNewYoutubeItemsReqDTO) error
+	Execute(context.Context) error
 }
 
 // GetYoutubeNextCursorUseCase --
 type GetYoutubeNextCursorUseCase interface {
-	Execute(context.Context, logger.Logger) error
+	Execute(context.Context) error
+}
+
+// FilteredYoutubeItemsUseCase --
+type FilteredYoutubeItemsUseCase interface {
+	Execute(context.Context) error
+}
+
+// GetRandomItemUseCase --
+type GetRandomItemUseCase interface {
+	Execute(context.Context) error
 }

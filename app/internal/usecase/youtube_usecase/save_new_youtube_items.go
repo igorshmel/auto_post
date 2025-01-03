@@ -1,4 +1,4 @@
-package repository_usecase
+package youtube_usecase
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/pkg/lib"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
 	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
+	"github.com/igorshmel/lic_auto_post/app/pkg/vars"
 	"github.com/nuttech/bell/v2"
 )
 
@@ -44,55 +45,44 @@ func NewSaveNewYoutubeItemsUseCase(
 }
 
 // Execute _
-func (ths SaveNewYoutubeItemsUseCase) Execute(ctx context.Context, log logger.Logger, req *dto.SaveNewYoutubeItemsReqDTO) error {
+func (ths SaveNewYoutubeItemsUseCase) Execute(ctx context.Context) error {
 	msg := fmt.Sprintf
-	log.Info("REQ: SaveNewYoutubeItems: %v", req)
-
-	// Получаем список элементов
-	items := ths.youtubeDomain.GetItems()
-	log.Debug("Retrieved %d items from YouTube domain", len(items)) // Уменьшено шумное логирование
-
-	newVideos := make([]dto.VideoInfo, 0) // Фильтруем только новые видео
-
-	for _, item := range items {
-		videoDBO := mapping.ConvertDDOItemToDBO(item)
-		videoExists, err := ths.extractor.IsVideoIDExists(ctx, &videoDBO)
-		if err != nil {
-			return lib.ExtErr(
-				errs.UnknownError,
-				msg("failed to check if video exists (ID: %s): %s", item.VideoId, err.Error()),
-				log,
-			)
-		}
-
-		// Добавляем только те видео, которых нет в базе данных
-		if !videoExists {
-			newVideos = append(newVideos, dto.VideoInfo{
-				Title:   item.Title,
-				VideoId: item.VideoId,
-			})
-		}
+	requestID, ok := ctx.Value(vars.RequestIDKey).(string)
+	if !ok {
+		return fmt.Errorf("requestID not found in context")
 	}
 
-	if len(newVideos) == 0 {
-		log.Info("No new videos to save")
+	l := ths.log.WithMethod(requestID + " | usecase GetPlayList")
+	l.Info("start")
+
+	// Получаем список элементов
+	items := ths.youtubeDomain.GetItems(requestID)
+
+	if len(items) == 0 {
+		l.Info("No new videos to save")
 		return nil
 	}
 
 	// Маппинг и множественное сохранение
-	videoDBOs := make([]dbo.SaveNewYoutubeItemsDBO, len(newVideos))
-	for i, video := range newVideos {
-		videoDBOs[i] = *mapping.YoutubeSaveNewYoutubeItemsDtOtoDBO(&video)
+	videoDBOs := make([]dbo.SaveNewYoutubeItemsDBO, len(items))
+	for i, item := range items {
+		videoDBOs[i] = *mapping.YoutubeSaveNewYoutubeItemsDtOtoDBO(&dto.VideoInfo{
+			Title:   item.Title,
+			VideoID: item.VideoID,
+		})
 	}
 
+	// Сохраняем новые элементы
 	if err := ths.persister.SaveNewYoutubeItemsBatch(ctx, videoDBOs); err != nil {
 		return lib.ExtErr(
 			errs.UnknownError,
 			msg("failed to save new videos batch: %s", err.Error()),
-			log,
+			l,
 		)
 	}
 
-	log.Info("Successfully saved %d new videos", len(newVideos))
+	ths.youtubeDomain.DeleteState(requestID)
+
+	l.Info("Successfully saved %d new videos")
 	return nil
 }

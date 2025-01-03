@@ -30,5 +30,5 @@ func (ths *GetPlayListReqDTO) Validate() error {
 // GetPlayListResDTO --
 type GetPlayListResDTO struct {
 	Title   string `json:"title,omitempty"`
-	VideoId string `json:"videoId,omitempty"`
+	VideoID string `json:"videoId,omitempty"`
 }

@@ -6,16 +6,18 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/internal/adapters/port"
 	transport "github.com/igorshmel/lic_auto_post/app/internal/adapters/transport/youtube"
 	"github.com/igorshmel/lic_auto_post/app/pkg/config"
+	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
 	"github.com/igorshmel/lic_auto_post/app/pkg/lib"
 	logger "github.com/igorshmel/lic_auto_post/app/pkg/log"
+	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars"
 	"github.com/igorshmel/lic_auto_post/app/pkg/vars/constants"
 	"github.com/nuttech/bell/v2"
 )
 
-// GetNextCursorUseCase --
-type GetNextCursorUseCase struct {
+// GetRandomItemUseCase --
+type GetRandomItemUseCase struct {
 	cfg           config.Config
 	log           logger.Logger
 	bell          *bell.Events
@@ -25,8 +27,8 @@ type GetNextCursorUseCase struct {
 	youtubeDomain port.YoutubeMachineDomain
 }
 
-// NewGetNextCursorUseCase --
-func NewGetNextCursorUseCase(
+// NewGetRandomItemUseCase --
+func NewGetRandomItemUseCase(
 	cfg config.Config,
 	log logger.Logger,
 	events *bell.Events,
@@ -34,8 +36,8 @@ func NewGetNextCursorUseCase(
 	extractor port.Extractor,
 	youtubeClient *transport.YouTubeClient,
 	youtubeDomain port.YoutubeMachineDomain,
-) port.GetYoutubeNextCursorUseCase {
-	return GetNextCursorUseCase{
+) port.GetRandomItemUseCase {
+	return GetRandomItemUseCase{
 		cfg:           cfg,
 		log:           log,
 		bell:          events,
@@ -47,41 +49,44 @@ func NewGetNextCursorUseCase(
 }
 
 // Execute _
-func (ths GetNextCursorUseCase) Execute(ctx context.Context) error {
+func (ths GetRandomItemUseCase) Execute(ctx context.Context) error {
 
-	// получает уникальный идентификатор запроса ~~~
+	// получает уникальный идентификатор запроса
 	// ===============================================================================================================
 	requestID, ok := ctx.Value(vars.RequestIDKey).(string)
 	if !ok {
 		return fmt.Errorf("requestID not found in context")
 	}
 
-	// настраивает логирование ~~~
+	// настраивает логирование
 	// ===============================================================================================================
 	msg := fmt.Sprintf
-	l := ths.log.WithMethod(requestID + " | usecase GetNextCursor")
+	l := ths.log.WithMethod(requestID + " | usecase GetRandomItem")
 	l.Info("start")
 
-	// получает заранее сохраненный курсор для обхода списка видеороликов ~~~
+	// получает из БД случайную запись о видеоролике в статусе Active
 	// ===============================================================================================================
-	nextCursor, err := ths.extractor.GetYoutubeNextCursor(ctx)
+	var randomItem dbo.YoutubeItemDBO
+
+	err := ths.extractor.GetRandomActiveItem(&randomItem)
 	if err != nil {
 		return lib.ExtErr(
-			errs.ExtGetNextCursor,
-			msg("failed to extract nextCursor with error: %s", err.Error()), l,
+			errs.ExtGetRandomItem,
+			msg("failed to fetch random item: %s", err.Error()), l,
 		)
 	}
 
-	// записывает курсор в доменную модель ~~~
+	// вносит информацию о случайной записи о видеоролике в домен
 	// ===============================================================================================================
-	if nextCursor != nil {
-		ths.youtubeDomain.KeepNextCursor(requestID, nextCursor.NextPageToken)
+	item := mapping.ConvertDBOToYoutubeDDO(randomItem)
+	if item != nil {
+		ths.youtubeDomain.KeepRandomItem(requestID, item)
 	}
 
-	// событие для сценария получения новых видеороликов из плейлиста ~~~
+	// событие для сценария запроса
 	// ===============================================================================================================
-	if err := ths.bell.Ring(constants.GetPlaylist_Youtube_Event, ctx); err != nil {
-		l.Error("unable send event GetPlaylist_Youtube_Event with error: %s", err.Error())
+	if err := ths.bell.Ring(constants.GetVideo_VK_Event, ctx); err != nil {
+		l.Error("unable send event GetVideo_VK_Event with error: %s", err.Error())
 	}
 	return err
 }

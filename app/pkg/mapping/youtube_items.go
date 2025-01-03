@@ -19,7 +19,7 @@ func ConvertVideosInfoDTOtoDEO(items []dto.VideoInfo) []deo.VideoInfo {
 		videosInfo = append(videosInfo,
 			deo.VideoInfo{
 				Title:   item.Title,
-				VideoId: item.VideoId,
+				VideoID: item.VideoID,
 			})
 	}
 	return videosInfo
@@ -32,7 +32,7 @@ func ConvertVideosInfoDEOtoDTO(items []deo.VideoInfo) []dto.VideoInfo {
 		videosInfo = append(videosInfo,
 			dto.VideoInfo{
 				Title:   item.Title,
-				VideoId: item.VideoId,
+				VideoID: item.VideoID,
 			})
 	}
 	return videosInfo
@@ -41,21 +41,21 @@ func ConvertVideosInfoDEOtoDTO(items []deo.VideoInfo) []dto.VideoInfo {
 // ConvertVideosInfoDTOtoDBO --
 func ConvertVideosInfoDTOtoDBO(dto dto.VideoInfo) dbo.IsVideoExistsDBO {
 	return dbo.IsVideoExistsDBO{
-		VideoId: dto.VideoId,
+		VideoID: dto.VideoID,
 	}
 }
 
 // ConvertDDOItemToDBO --
 func ConvertDDOItemToDBO(ddo ddo.ResGetItems) dbo.IsVideoExistsDBO {
 	return dbo.IsVideoExistsDBO{
-		VideoId: ddo.VideoId,
+		VideoID: ddo.VideoID,
 	}
 }
 
 // ConvertIsVideoExistsDBOtoModel --
 func ConvertIsVideoExistsDBOtoModel(dbo *dbo.IsVideoExistsDBO) *models.YoutubeItemsModel {
 	return &models.YoutubeItemsModel{
-		VideoId: dbo.VideoId,
+		VideoID: dbo.VideoID,
 	}
 }
 
@@ -67,7 +67,7 @@ func YoutubeSaveNewYoutubeItemsDBOtoModel(dbo *dbo.SaveNewYoutubeItemsDBO) *mode
 	base.UpdatedAt = dbo.UpdatedAt
 	return &models.YoutubeItemsModel{
 		Title:     dbo.Title,
-		VideoId:   dbo.VideoId,
+		VideoID:   dbo.VideoID,
 		Status:    dbo.Status,
 		BaseModel: base,
 	}
@@ -78,7 +78,7 @@ func YoutubeSaveNewYoutubeItemsDtOtoDBO(dto *dto.VideoInfo) *dbo.SaveNewYoutubeI
 	return &dbo.SaveNewYoutubeItemsDBO{
 		UUID:      uuid.New().String(),
 		Title:     dto.Title,
-		VideoId:   dto.VideoId,
+		VideoID:   dto.VideoID,
 		Status:    status.RecordActiveStatus,
 		CreatedAt: time.Now(),
 	}
@@ -92,5 +92,13 @@ func YoutubeNextCursorDBOtoModel(dbo *dbo.YoutubeNextCursorDBO) *models.YoutubeN
 	return &models.YoutubeNextCursorModel{
 		NextPageToken: dbo.NextPageToken,
 		BaseModel:     base,
+	}
+}
+
+// ConvertDBOToYoutubeDDO --
+func ConvertDBOToYoutubeDDO(dbo dbo.YoutubeItemDBO) *ddo.YoutubeItemDDO {
+	return &ddo.YoutubeItemDDO{
+		Title:   dbo.Title,
+		VideoID: dbo.VideoID,
 	}
 }

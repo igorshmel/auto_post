@@ -9,7 +9,7 @@ import (
 // YoutubeItemsModel - список видео роликов
 type YoutubeItemsModel struct {
 	Title   string                  `gorm:"not null"`
-	VideoId string                  `gorm:"not null"`
+	VideoID string                  `gorm:"not null"`
 	Status  status.RecordStatusEnum `gorm:"type:record_status;column:status;"` // статус использования видео ролика
 	basis.BaseModel
 }

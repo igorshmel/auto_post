@@ -128,15 +128,31 @@ func setCron(
 		fmt.Printf("in argument is %s\n", in)
 
 		// отправка события для начала процесса чтения и сохранения записей плейлиста.
-		if err := bellEvent.Ring(
-			constants.YouTubeGetNextCursorEventName, deo.GetNextCursorEvent{}); err != nil {
-			log.Error("unable send event YouTubeGetNextCursor with error: %s", err.Error())
+		if err := bellEvent.Ring(constants.GetNextCursor_Youtube_Event, nil); err != nil {
+			log.Error("Event error - GetNextCursor_Youtube_Event with error: %s", err.Error())
 		}
-		log.Debug("sendEvent YouTubeGetNextCursor success!")
+		log.Debug("Event GetNextCursor_Youtube_Event send success!")
 	}
 
 	// Конфигурируем время и частоту выполнения задачи
-	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(taskGetYoutubeNextCursor, "foo"); err != nil {
+	if _, err := cron.Cron("* * */1  * *").DoWithJobDetails(taskGetYoutubeNextCursor, "foo"); err != nil {
+		log.Error("unable to set the task: %s", err)
+		return
+	}
+
+	taskGetRandomItem := func(in string, job gocron.Job) {
+		fmt.Printf("this job's last run: %s this job's next run: %s\n", job.LastRun(), job.NextRun())
+		fmt.Printf("in argument is %s\n", in)
+
+		// отправка события для начала процесса постинга видео на стену в VK
+		if err := bellEvent.Ring(constants.Get_Random_Item_Event, nil); err != nil {
+			log.Error("Event error - Get_Random_Item_Event with error: %s", err.Error())
+		}
+		log.Debug("Event Get_Random_Item_Event send success!")
+	}
+
+	// Конфигурируем время и частоту выполнения задачи
+	if _, err := cron.Cron("* */1 * * *").DoWithJobDetails(taskGetRandomItem, "foo"); err != nil {
 		log.Error("unable to set the task: %s", err)
 		return
 	}

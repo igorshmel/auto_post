@@ -7,6 +7,7 @@ import (
 	"github.com/igorshmel/lic_auto_post/app/pkg/dbo"
 	"github.com/igorshmel/lic_auto_post/app/pkg/errs"
 	"github.com/igorshmel/lic_auto_post/app/pkg/mapping"
+	status "github.com/igorshmel/lic_auto_post/app/pkg/vars/statuses"
 )
 
 // CreateRecord --
@@ -130,6 +131,27 @@ func (ths *SQLStore) UpdateYoutubeNextCursor(ctx context.Context, dbo *dbo.Youtu
 	if err := ths.db.Table(model.TableName()).
 		UpdateColumns(&model).Error; err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// UpdateStatusToUsed -- обновляет статус записи с Active на Used
+func (ths *SQLStore) UpdateStatusToUsed(recordID uint) error {
+	if ths == nil || ths.db == nil {
+		return errors.New(errs.MsgEmptyDbPointer)
+	}
+
+	res := ths.db.Model(&models.YoutubeItemsModel{}).
+		Where("id = ? AND status = ?", recordID, status.RecordActiveStatus).
+		Update("status", status.RecordUsedStatus)
+
+	if res.Error != nil {
+		return res.Error
+	}
+
+	if res.RowsAffected == 0 {
+		return errors.New(errs.MsgNotFound)
 	}
 
 	return nil

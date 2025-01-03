@@ -5,12 +5,13 @@ import (
 	"time"
 )
 
-// SaveNewYoutubeItemsDBO --
-type SaveNewYoutubeItemsDBO struct {
-	UUID      string
+// YoutubeItemDBO --
+type YoutubeItemDBO struct {
 	Title     string
 	VideoID   string
 	Status    status.RecordStatusEnum
-	UpdatedAt *time.Time
+	ID        int64
+	UUID      string
 	CreatedAt time.Time
+	UpdatedAt *time.Time
 }

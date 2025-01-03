@@ -62,6 +62,6 @@ type ResPhotosSave struct {
 
 // ResGetItems --
 type ResGetItems struct {
-	VideoId string
+	VideoID string
 	Title   string
 }

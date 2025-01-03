@@ -6,6 +6,9 @@ const (
 	MsgEmptyInputData = "ERR_INPUT_DATA_IS_EMPTY"
 	MsgNotFound       = "ERR_NOT_FOUND"
 
+	ExtGetNextCursor = "ERR_EXTRACTOR_GET_NEXT_CURSOR"
+	ExtGetRandomItem = "ERR_EXTRACTOR_GET_RANDOM_ITEM"
+
 	UnknownError = "ERR_UNKNOWN_ERROR"
 )
 
